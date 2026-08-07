@@ -15,17 +15,15 @@ export default function Page() {
   return (
     <>
       <BootSequence onDone={() => setBooted(true)} />
-      {booted && (
-        <div>
-          <Screen2Intro />
-          <Screen3Profile />
-          <Screen4Selector />
-          <Screen5Constellation />
-          <Screen6ProofOfWork />
-          <Screen7Process />
-          <Screen8FinalCTA />
-        </div>
-      )}
+      <div style={{ visibility: booted ? "visible" : "hidden" }}>
+        <Screen2Intro />
+        <Screen3Profile />
+        <Screen4Selector />
+        <Screen5Constellation />
+        <Screen6ProofOfWork />
+        <Screen7Process />
+        <Screen8FinalCTA />
+      </div>
     </>
   );
 }
