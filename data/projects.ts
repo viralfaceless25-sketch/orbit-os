@@ -70,6 +70,7 @@ export const projects: Project[] = [
       "Working Milestone 1: draggable panel, safe demo action, emergency stop, and command allowlist all functioning.",
       "Consent/audit architecture in place for later milestones that add real actions.",
     ],
+    githubUrl: "https://github.com/viralfaceless25-sketch/-OSPA-OSPetAgent.",
     screenshots: [],
   },
   {
@@ -78,7 +79,7 @@ export const projects: Project[] = [
     category: "web",
     tier: "featured",
     oneLiner: "A 3D-driven jewelry storefront with checkout and custom product configuration.",
-    status: "tbd",
+    status: "live",
     role: "Design and development.",
     problem:
       "A jewelry retailer needed an online storefront that could show product detail and craftsmanship the way a physical showroom does, not just flat product photos.",
@@ -95,6 +96,8 @@ export const projects: Project[] = [
       "Full storefront built end to end, from 3D product views through checkout.",
       "Custom-order flow handles real document upload and extraction.",
     ],
+    githubUrl: "https://github.com/viralfaceless25-sketch/jewel-stone",
+    liveUrl: "https://jewelstone.com",
     screenshots: [],
   },
   {
@@ -120,6 +123,7 @@ export const projects: Project[] = [
       "Cross-branch routing live across all three offices.",
       "Review-first request flow removes the double-booking problem entirely.",
     ],
+    githubUrl: "https://github.com/viralfaceless25-sketch/DIMS-Diamond-Inventory-sales-Management-System-",
     screenshots: [],
   },
 ];
