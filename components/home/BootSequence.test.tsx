@@ -5,6 +5,7 @@ import { BootSequence } from "./BootSequence";
 describe("BootSequence", () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    window.sessionStorage.clear();
   });
 
   afterEach(() => {
@@ -16,13 +17,31 @@ describe("BootSequence", () => {
     expect(screen.getByText("Initializing ORBIT OS")).toBeInTheDocument();
   });
 
-  it("runs on every load, not only the first visit", () => {
-    // Previously a localStorage flag skipped this for returning visitors. The
-    // sequence is now part of arriving at the site every time.
-    const onDone = vi.fn();
-    const first = render(<BootSequence onDone={onDone} />);
+  it("plays once per visit and not again on a refresh", () => {
+    // The complaint this pins: replaying the sequence on every load is
+    // irritating. It should greet an arrival, then stay out of the way.
+    const first = render(<BootSequence onDone={vi.fn()} />);
     expect(screen.getByText("System ready")).toBeInTheDocument();
+
+    // The visit is only recorded once the sequence finishes, so let it run.
+    act(() => {
+      vi.advanceTimersByTime(4000);
+    });
     first.unmount();
+
+    const onDone = vi.fn();
+    const { container } = render(<BootSequence onDone={onDone} />);
+    expect(container).toBeEmptyDOMElement();
+    expect(onDone).toHaveBeenCalled();
+  });
+
+  it("plays again for a new visit, once the session is gone", () => {
+    const first = render(<BootSequence onDone={vi.fn()} />);
+    act(() => {
+      vi.advanceTimersByTime(4000);
+    });
+    first.unmount();
+    window.sessionStorage.clear();
 
     render(<BootSequence onDone={vi.fn()} />);
     expect(screen.getByText("System ready")).toBeInTheDocument();

@@ -1,15 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
+import { hasBooted, markBooted } from "@/lib/boot-once";
 
 /*
-  Boot sequence, shown on every load rather than only the first.
+  Boot sequence, shown once per visit.
 
-  This is a deliberate departure from the spec's performance rule ("skipped
-  after the first visit"): the owner wants the sequence to be part of arriving
-  at the site every time. The cost is a couple of seconds before content on a
-  return visit, so it stays escapable — any click or key press ends it, and it
-  is skipped outright under reduced motion.
+  It plays when someone arrives and then stays out of the way: refreshing or
+  moving around during the same visit does not replay it, but a new visit or a
+  new tab gets it again. It is escapable by any click or key press, and skipped
+  outright under reduced motion.
 */
 
 const LINES = [
@@ -30,7 +30,8 @@ export function BootSequence({ onDone }: { onDone: () => void }) {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    if (reduced) {
+    // Already seen this visit, or motion is unwanted: go straight to content.
+    if (reduced || hasBooted()) {
       setSkip(true);
       onDone();
       return;
@@ -41,7 +42,16 @@ export function BootSequence({ onDone }: { onDone: () => void }) {
       setStep((s) => Math.min(s + 1, LINES.length - 1));
     }, LINE_MS);
 
-    const timer = setTimeout(() => onDone(), LINES.length * LINE_MS + HOLD_MS);
+    /*
+      The session is marked as booted when the sequence ends, not when it
+      starts. React runs effects twice in development, and marking on entry
+      meant the second pass saw the flag already set and skipped the sequence
+      entirely, so it never played at all.
+    */
+    const timer = setTimeout(() => {
+      markBooted();
+      onDone();
+    }, LINES.length * LINE_MS + HOLD_MS);
 
     return () => {
       clearInterval(stepper);
@@ -52,7 +62,10 @@ export function BootSequence({ onDone }: { onDone: () => void }) {
   // Any interaction escapes the sequence, so it never traps anyone.
   useEffect(() => {
     if (skip !== false) return;
-    const escape = () => onDone();
+    const escape = () => {
+      markBooted();
+      onDone();
+    };
     window.addEventListener("keydown", escape);
     window.addEventListener("pointerdown", escape);
     return () => {
