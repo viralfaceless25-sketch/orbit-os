@@ -56,8 +56,29 @@ describe("POST /api/inquiry", () => {
     const body = await res.json();
     expect(res.status).toBe(200);
     expect(body.reference).toMatch(/^PRJ-\d{4}-\d{3}$/);
-    expect(sendMock).toHaveBeenCalledTimes(1);
+
+    // Two messages go out: the lead to the owner, and a copy to the visitor so
+    // they have a record of what they submitted.
+    expect(sendMock).toHaveBeenCalledTimes(2);
     expect(sendMock.mock.calls[0][0].to).toBe("owner@example.com");
+    expect(sendMock.mock.calls[1][0].to).toBe("me@example.com");
+    expect(body.clientCopySent).toBe(true);
+  });
+
+  it("still reports success when only the visitor's copy fails", async () => {
+    // The lead is what matters. An unverified sending domain rejects every
+    // recipient except the account owner, and that must not lose the lead.
+    sendMock
+      .mockResolvedValueOnce({ data: { id: "email_owner" }, error: null })
+      .mockResolvedValueOnce({ data: null, error: { message: "not allowed" } });
+
+    const { POST } = await import("./route");
+    const res = await POST(validRequest());
+    const body = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(body.reference).toBeTruthy();
+    expect(body.clientCopySent).toBe(false);
   });
 });
 

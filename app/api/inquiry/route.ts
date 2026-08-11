@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { generateInquiryReference } from "@/lib/inquiry-reference";
+import {
+  ownerNotificationEmail,
+  clientConfirmationEmail,
+  type InquiryDetails,
+} from "@/lib/emails";
 
 interface InquiryPayload {
   interest?: string;
@@ -28,24 +33,30 @@ export async function POST(req: NextRequest) {
 
   const reference = generateInquiryReference();
   const resend = new Resend(process.env.RESEND_API_KEY);
+  const from = process.env.INQUIRY_FROM_EMAIL ?? "ORBIT OS <onboarding@resend.dev>";
 
+  const details: InquiryDetails = {
+    reference,
+    interest: body.interest,
+    stage: body.stage,
+    outcome: body.outcome,
+    timeline: body.timeline,
+    contact: body.contact,
+  };
+
+  // The owner notification is the one that must land: it is the actual lead.
   // The SDK resolves with { data, error } rather than throwing on API-level
-  // failures, so the error field must be checked explicitly. Reporting success
-  // here when nothing was delivered is the worst outcome: the visitor believes
-  // they have contacted us and never follows up.
+  // failures, so the error field is checked explicitly. Reporting success when
+  // nothing was delivered is the worst outcome, because the visitor believes
+  // they have made contact and never follows up.
+  const owner = ownerNotificationEmail(details);
   const { data, error } = await resend.emails.send({
-    from: process.env.INQUIRY_FROM_EMAIL ?? "ORBIT OS <onboarding@resend.dev>",
+    from,
     to,
     replyTo: body.contact.includes("@") ? body.contact : undefined,
-    subject: `New project inquiry ${reference}`,
-    text: [
-      `Reference: ${reference}`,
-      `Interested in: ${body.interest}`,
-      `Stage: ${body.stage}`,
-      `Desired outcome: ${body.outcome}`,
-      `Timeline: ${body.timeline}`,
-      `Contact: ${body.contact}`,
-    ].join("\n"),
+    subject: owner.subject,
+    html: owner.html,
+    text: owner.text,
   });
 
   if (error || !data) {
@@ -56,5 +67,33 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  return NextResponse.json({ reference });
+  // The visitor's copy is a courtesy, not the lead. It is attempted separately
+  // and never allowed to fail the request: on an unverified sending domain the
+  // provider refuses every recipient except the account owner, and the lead has
+  // already been delivered by this point regardless.
+  let clientCopySent = false;
+  if (body.contact.includes("@")) {
+    const confirmation = clientConfirmationEmail(details);
+    const copy = await resend.emails
+      .send({
+        from,
+        to: body.contact.trim(),
+        replyTo: to,
+        subject: confirmation.subject,
+        html: confirmation.html,
+        text: confirmation.text,
+      })
+      .catch((err) => ({ data: null, error: err }));
+
+    if (copy.error || !copy.data) {
+      console.warn(
+        `Confirmation copy to ${body.contact} was not delivered:`,
+        copy.error
+      );
+    } else {
+      clientCopySent = true;
+    }
+  }
+
+  return NextResponse.json({ reference, clientCopySent });
 }
