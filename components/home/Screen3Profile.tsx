@@ -1,3 +1,5 @@
+import { Reveal } from "@/components/fx/Reveal";
+
 const SPEC = [
   ["Name", "Keyush Patel"],
   ["Primary function", "Product development"],
@@ -8,7 +10,7 @@ const SPEC = [
 
 export function Screen3Profile() {
   return (
-    <section className="grid gap-10 border-t border-line py-20 md:grid-cols-[1fr_1.2fr] md:gap-16">
+    <Reveal className="grid gap-10 border-t border-line py-20 md:grid-cols-[1fr_1.2fr] md:gap-16">
       <div>
         <p className="font-mono text-label uppercase text-ink-faint">Builder profile</p>
         <dl className="mt-6 space-y-0">
@@ -34,6 +36,6 @@ export function Screen3Profile() {
           workflow, prototyping a new app, or helping solve a difficult technical problem.
         </p>
       </div>
-    </section>
+    </Reveal>
   );
 }

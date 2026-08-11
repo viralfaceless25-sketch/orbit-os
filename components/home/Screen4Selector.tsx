@@ -37,7 +37,7 @@ export function Screen4Selector() {
     <section className="py-20">
       <SectionHeader index="02" eyebrow="Start here" title="What are you trying to build?" />
 
-      <div className="grid gap-px bg-line sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         {MODULES.map((m) => {
           const isActive = selected === m.label;
           return (
@@ -45,8 +45,10 @@ export function Screen4Selector() {
               key={m.label}
               onClick={() => setSelected(isActive ? null : m.label)}
               aria-pressed={isActive}
-              className={`bg-graphite p-6 text-left outline-none transition-colors hover:bg-panel ${
-                isActive ? "bg-panel" : ""
+              className={`hud border p-6 text-left outline-none backdrop-blur-sm transition-colors ${
+                isActive
+                  ? "border-line-bright bg-panel/80"
+                  : "border-line bg-graphite/60 hover:border-line-bright hover:bg-panel/60"
               }`}
             >
               <p className="font-display text-lg font-medium">{m.label}</p>

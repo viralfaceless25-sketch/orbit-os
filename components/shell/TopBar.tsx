@@ -55,8 +55,7 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
           <span className="hidden items-center gap-2 font-mono text-label uppercase text-ink-dim sm:flex">
             <span
               aria-hidden
-              className="h-1.5 w-1.5 rounded-full bg-accent-oss"
-              style={{ boxShadow: "0 0 8px var(--color-accent-oss)" }}
+              className="led h-1.5 w-1.5 rounded-full bg-accent-oss text-accent-oss"
             />
             Available
           </span>

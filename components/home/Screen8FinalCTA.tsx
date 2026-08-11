@@ -1,6 +1,8 @@
+import { Reveal } from "@/components/fx/Reveal";
+
 export function Screen8FinalCTA() {
   return (
-    <section className="border-t border-line py-24">
+    <Reveal className="border-t border-line py-24">
       <p className="font-mono text-label uppercase text-ink-faint">Have an idea?</p>
       <h2 className="mt-5 max-w-2xl font-display text-display-sm font-medium text-balance md:text-display-md">
         You do not need a finished spec. Bring the rough idea.
@@ -15,6 +17,6 @@ export function Screen8FinalCTA() {
       >
         Start a Project
       </a>
-    </section>
+    </Reveal>
   );
 }

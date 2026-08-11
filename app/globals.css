@@ -14,13 +14,18 @@
   --color-panel-raised: #1a1c21;
 
   /* Structure */
-  --color-line: #26282f;
-  --color-line-bright: #34373f;
+  --color-line: #2b2e36;
+  --color-line-bright: #454951;
 
-  /* Text */
-  --color-text: #e8e6e3;
-  --color-text-dim: #8a8c93;
-  --color-text-faint: #55575e;
+  /*
+    Text contrast against --color-graphite (#0c0c0e), measured:
+      text       17.2:1   dim  9.7:1   faint  6.8:1
+    All three clear WCAG AA for body copy. The previous faint value sat at
+    2.7:1 and was unreadable in bright light — never take these below 4.5:1.
+  */
+  --color-text: #f2f0ed;
+  --color-text-dim: #b4b7bf;
+  --color-text-faint: #9598a1;
 
   /* Category accents — status indicators only, never large fills */
   --color-accent-ai: #7c5cff;
@@ -31,7 +36,7 @@
 
   /* Blueprint grid */
   --grid-size: 32px;
-  --grid-line: rgba(255, 255, 255, 0.022);
+  --grid-line: rgba(150, 175, 220, 0.045);
 }
 
 html {
@@ -84,6 +89,56 @@ body {
     margin-right: 8px;
     vertical-align: middle;
     background: var(--color-line-bright);
+  }
+
+  /*
+    HUD frame: corner brackets that trace in on hover. Drawn with two gradient
+    layers rather than four elements, so it costs nothing in markup and
+    animates as a single opacity/size transition.
+  */
+  .hud {
+    position: relative;
+  }
+
+  .hud::before,
+  .hud::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+    transition: opacity 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+      width 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+      height 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+    pointer-events: none;
+  }
+
+  .hud::before {
+    top: -1px;
+    left: -1px;
+    border-top: 1px solid var(--color-text);
+    border-left: 1px solid var(--color-text);
+  }
+
+  .hud::after {
+    right: -1px;
+    bottom: -1px;
+    border-right: 1px solid var(--color-text);
+    border-bottom: 1px solid var(--color-text);
+  }
+
+  .hud:hover::before,
+  .hud:hover::after,
+  .hud:focus-visible::before,
+  .hud:focus-visible::after {
+    opacity: 1;
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Status LED with a real bloom, used for category and availability dots */
+  .led {
+    box-shadow: 0 0 10px currentColor, 0 0 3px currentColor;
   }
 }
 

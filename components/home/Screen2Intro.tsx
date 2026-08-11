@@ -66,11 +66,8 @@ export function Screen2Intro() {
           >
             <span
               aria-hidden
-              className="h-1.5 w-1.5 rounded-full"
-              style={{
-                backgroundColor: ACCENT[p.category],
-                boxShadow: `0 0 8px ${ACCENT[p.category]}`,
-              }}
+              className="led h-1.5 w-1.5 rounded-full"
+              style={{ backgroundColor: ACCENT[p.category], color: ACCENT[p.category] }}
             />
             <span className="font-display text-base font-medium text-ink transition-colors">
               {p.title}

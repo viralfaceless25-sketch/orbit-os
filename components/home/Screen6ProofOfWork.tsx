@@ -1,4 +1,5 @@
 import { SectionHeader } from "./SectionHeader";
+import { RevealStagger } from "@/components/fx/Reveal";
 
 const OUTPUT = [
   "Built a multi-agent AI orchestrator with a live dashboard",
@@ -12,9 +13,9 @@ export function Screen6ProofOfWork() {
     <section className="py-20">
       <SectionHeader index="03" eyebrow="Recent output" title="What has shipped lately" />
 
-      <ul className="space-y-0">
+      <RevealStagger>
         {OUTPUT.map((line, i) => (
-          <li
+          <div
             key={line}
             className="grid grid-cols-[2.5rem_1fr] items-baseline gap-4 border-b border-line py-4"
           >
@@ -22,9 +23,9 @@ export function Screen6ProofOfWork() {
               {String(i + 1).padStart(2, "0")}
             </span>
             <span className="text-ink-dim">{line}</span>
-          </li>
+          </div>
         ))}
-      </ul>
+      </RevealStagger>
     </section>
   );
 }
