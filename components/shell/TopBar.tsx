@@ -17,7 +17,7 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-graphite/80 backdrop-blur-xl">
-      <div className="grid h-20 grid-cols-[1fr_auto_1fr] items-center gap-6 px-6">
+      <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:h-20 sm:gap-6 sm:px-6">
         <nav className="hidden items-center gap-7 font-mono text-label uppercase text-ink-dim md:flex">
           <Link href="/projects" className="transition-colors hover:text-ink">
             Projects
@@ -38,7 +38,7 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
         <Link
           href="/"
           aria-label="ORBIT OS, Keyush Patel"
-          className="group relative col-start-2 block h-9 w-[16rem] overflow-hidden text-center outline-none sm:w-[20rem]"
+          className="group relative col-start-2 block h-9 w-[11rem] overflow-hidden text-center outline-none xs:w-[13rem] sm:w-[16rem] md:w-[20rem]"
         >
           {WORDMARKS.map((word, i) => {
             const active = i === index;
@@ -46,7 +46,7 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
               <span
                 key={word}
                 aria-hidden={!active}
-                className="absolute inset-0 flex items-center justify-center whitespace-nowrap font-display text-2xl font-medium tracking-[0.14em] sm:text-3xl"
+                className="absolute inset-0 flex items-center justify-center whitespace-nowrap font-display text-base font-medium tracking-[0.08em] xs:text-lg sm:text-2xl sm:tracking-[0.14em] md:text-3xl"
                 style={{
                   opacity: active ? 1 : 0,
                   transform: reduced
@@ -81,15 +81,19 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
           <button
             aria-label="Open command palette"
             onClick={onOpenPalette}
-            className="rounded-sm border border-line px-2.5 py-1.5 font-mono text-label text-ink-dim transition-colors hover:border-line-bright hover:text-ink"
+            className="shrink-0 rounded-sm border border-line px-2 py-1.5 font-mono text-label text-ink-dim transition-colors hover:border-line-bright hover:text-ink sm:px-2.5"
           >
-            ⌘K
+            <span className="sm:hidden" aria-hidden>
+              ☰
+            </span>
+            <span className="hidden sm:inline">⌘K</span>
           </button>
           <Link
             href="/start-a-project"
-            className="hidden rounded-sm bg-ink px-4 py-2 font-mono text-label uppercase text-graphite transition-opacity hover:opacity-85 sm:block"
+            className="shrink-0 rounded-sm bg-ink px-2.5 py-1.5 font-mono text-label uppercase text-graphite transition-opacity hover:opacity-85 sm:px-4 sm:py-2"
           >
-            Start a Project
+            <span className="sm:hidden">Start</span>
+            <span className="hidden sm:inline">Start a Project</span>
           </Link>
         </div>
       </div>

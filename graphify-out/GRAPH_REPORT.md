@@ -157,3 +157,8 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
 - **Should `TypeScript Config Types` be split into smaller, more focused modules?**
   _Cohesion score 0.07692307692307693 - nodes in this community are weakly interconnected._
+---
+
+## Session addendum — 2026-08-11 (not re-extracted, log only)
+
+Major additions since last graph build: SystemMonitor replaced galaxy/constellation view on /projects. OSPA chatbot (lib/ospa-provider.ts, lib/ospa-knowledge.ts, app/api/ospa/route.ts, components/ospa/OspaChat.tsx) added, runs local Ollama qwen2.5:3b by default. Email system (lib/emails.ts) added with branded templates. Boot sequence (components/home/BootSequence.tsx, lib/boot-once.ts) reworked to once-per-session via sessionStorage. All internal `<a>` converted to next/link `<Link>` (perf + boot-replay bug fix). Full detail in memory: ~/.claude/projects/-Users-keyush/memory/orbit_os_session_2026-08-11.md. Re-run `/graphify /Volumes/ai-hub/orbit-os --update` next session to pick these up structurally.
