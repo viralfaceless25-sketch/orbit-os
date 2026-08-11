@@ -30,7 +30,11 @@ export function Screen4Selector() {
   const [selected, setSelected] = useState<string | null>(null);
   const active = MODULES.find((m) => m.label === selected);
   const matches = active?.category
-    ? projects.filter((p) => p.category === active.category)
+    ? projects
+        .filter((p) => p.category === active.category)
+        // Featured work leads; the rest is reachable from the projects index.
+        .sort((a, b) => (a.tier === "featured" ? -1 : 0) - (b.tier === "featured" ? -1 : 0))
+        .slice(0, 4)
     : [];
 
   return (

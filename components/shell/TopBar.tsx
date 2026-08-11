@@ -18,7 +18,7 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
     <header className="sticky top-0 z-40 border-b border-line bg-graphite/80 backdrop-blur-xl">
       <div className="grid h-20 grid-cols-[1fr_auto_1fr] items-center gap-6 px-6">
         <nav className="hidden items-center gap-7 font-mono text-label uppercase text-ink-dim md:flex">
-          <a href="/#projects" className="transition-colors hover:text-ink">
+          <a href="/projects" className="transition-colors hover:text-ink">
             Projects
           </a>
           <a href="/capabilities" className="transition-colors hover:text-ink">

@@ -50,12 +50,14 @@ export function Screen5Constellation() {
             {/* The problem is what a client recognises. Lead with it, not the stack. */}
             <p className="text-sm leading-relaxed text-ink-dim">{p.problem}</p>
 
-            <div className="mt-auto flex items-baseline gap-3 pt-2">
-              <span className="shrink-0 font-mono text-label uppercase text-ink-faint">
-                Result
-              </span>
-              <span className="text-sm leading-relaxed text-ink">{p.outcome[0]}</span>
-            </div>
+            {p.outcome?.[0] && (
+              <div className="mt-auto flex items-baseline gap-3 pt-2">
+                <span className="shrink-0 font-mono text-label uppercase text-ink-faint">
+                  Result
+                </span>
+                <span className="text-sm leading-relaxed text-ink">{p.outcome[0]}</span>
+              </div>
+            )}
 
             {/* Stack readout. The technical fingerprint of the system */}
             <ul className="flex flex-wrap gap-x-3 gap-y-1 border-t border-line pt-4">
@@ -77,6 +79,13 @@ export function Screen5Constellation() {
           </a>
         ))}
       </RevealStagger>
+
+      <a
+        href="/projects"
+        className="mt-8 inline-block font-mono text-label uppercase text-ink-dim transition-colors hover:text-ink"
+      >
+        View all {projects.length} projects &rarr;
+      </a>
     </Section>
   );
 }

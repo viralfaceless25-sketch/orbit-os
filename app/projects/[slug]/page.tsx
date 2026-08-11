@@ -1,9 +1,26 @@
 import { notFound } from "next/navigation";
 import { projects } from "@/data/projects";
 import { ProjectLinks } from "@/components/projects/ProjectLinks";
+import { ProjectPreview } from "@/components/projects/ProjectPreview";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
+}
+
+const STATUS_LABEL: Record<string, string> = {
+  live: "Live",
+  "in-development": "In development",
+  archived: "Archived",
+  tbd: "Unlisted",
+};
+
+function Block({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <section>
+      <h2 className="font-mono text-label uppercase text-ink-faint">{label}</h2>
+      <div className="mt-2 leading-relaxed">{children}</div>
+    </section>
+  );
 }
 
 export default function ProjectPage({ params }: { params: { slug: string } }) {
@@ -11,60 +28,58 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
   if (!project) notFound();
 
   return (
-    <article className="max-w-2xl space-y-8 py-12">
+    <article className="max-w-3xl space-y-10 py-16">
       <header>
-        <p className="font-mono text-xs text-ink-dim">
-          {project.category.toUpperCase()} · {project.status.replace("-", " ").toUpperCase()}
+        <p className="font-mono text-label uppercase text-ink-faint">
+          {project.category.replace("-", " ")} &middot;{" "}
+          {STATUS_LABEL[project.status] ?? project.status}
         </p>
-        <h1 className="text-3xl font-display">{project.title}</h1>
-        <p className="mt-2 text-ink-dim">{project.oneLiner}</p>
+        <h1 className="mt-3 font-display text-display-sm font-medium md:text-display-md">
+          {project.title}
+        </h1>
+        <p className="mt-4 text-lg text-ink-dim">{project.oneLiner}</p>
       </header>
 
-      <section>
-        <h2 className="font-mono text-xs text-ink-dim">THE PROBLEM</h2>
-        <p className="mt-1">{project.problem}</p>
-      </section>
+      {/* Live sites render as a real, scrollable embed rather than a screenshot. */}
+      <ProjectPreview project={project} />
 
-      <section>
-        <h2 className="font-mono text-xs text-ink-dim">MY CONTRIBUTION</h2>
-        <p className="mt-1">{project.contribution}</p>
-      </section>
+      {project.role && <Block label="Role">{project.role}</Block>}
+      {project.problem && <Block label="The problem">{project.problem}</Block>}
+      {project.contribution && <Block label="My contribution">{project.contribution}</Block>}
+      {project.solution && <Block label="The solution">{project.solution}</Block>}
 
-      <section>
-        <h2 className="font-mono text-xs text-ink-dim">THE SOLUTION</h2>
-        <p className="mt-1">{project.solution}</p>
-      </section>
-
-      <section>
-        <h2 className="font-mono text-xs text-ink-dim">TECHNICAL SYSTEM</h2>
-        <ul className="mt-1 flex flex-wrap gap-2 font-mono text-xs">
+      <Block label="Technical system">
+        <ul className="flex flex-wrap gap-2">
           {project.techStack.map((t) => (
-            <li key={t} className="rounded border border-line px-2 py-1">
+            <li
+              key={t}
+              className="border border-line px-2.5 py-1 font-mono text-label uppercase text-ink-dim"
+            >
               {t}
             </li>
           ))}
         </ul>
-      </section>
+      </Block>
 
-      {project.challenges.length > 0 && (
-        <section>
-          <h2 className="font-mono text-xs text-ink-dim">CHALLENGES</h2>
-          <ul className="mt-1 list-disc space-y-1 pl-5">
+      {project.challenges && project.challenges.length > 0 && (
+        <Block label="Challenges">
+          <ul className="list-disc space-y-2 pl-5">
             {project.challenges.map((c) => (
               <li key={c}>{c}</li>
             ))}
           </ul>
-        </section>
+        </Block>
       )}
 
-      <section>
-        <h2 className="font-mono text-xs text-ink-dim">OUTCOME</h2>
-        <ul className="mt-1 list-disc space-y-1 pl-5">
-          {project.outcome.map((o) => (
-            <li key={o}>{o}</li>
-          ))}
-        </ul>
-      </section>
+      {project.outcome && project.outcome.length > 0 && (
+        <Block label="Outcome">
+          <ul className="list-disc space-y-2 pl-5">
+            {project.outcome.map((o) => (
+              <li key={o}>{o}</li>
+            ))}
+          </ul>
+        </Block>
+      )}
 
       <ProjectLinks project={project} />
     </article>
