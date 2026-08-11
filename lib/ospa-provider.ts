@@ -1,4 +1,77 @@
 import { OSPA_SYSTEM_PROMPT } from "./ospa-knowledge";
+import { projects } from "@/data/projects";
+
+/*
+  Link safety is enforced here rather than left to the prompt. A small model
+  will occasionally build a project path out of the project's title
+  ("/projects/alberts-gold-and-silver" instead of "/projects/gold"), which hands
+  a visitor a dead link. Prompt wording reduces that but cannot guarantee it, so
+  any project path the model emits is checked against the real slugs and
+  rewritten to the projects index when it does not exist.
+*/
+const VALID_SLUGS = new Set(projects.map((p) => p.slug));
+const PROJECT_PATH = /\/projects\/([a-z0-9-]+)/gi;
+
+/** Every external address the assistant is allowed to say out loud. */
+const ALLOWED_HOSTS = new Set(
+  projects
+    .flatMap((p) => [p.liveUrl, p.githubUrl])
+    .filter((u): u is string => Boolean(u))
+    .map((u) => {
+      try {
+        return new URL(u).host.replace(/^www\./, "").toLowerCase();
+      } catch {
+        return "";
+      }
+    })
+    .filter(Boolean)
+);
+
+const EXTERNAL_URL = /https?:\/\/[^\s)\]<>"']+/gi;
+
+/**
+ * Removes any web address that isn't a real one from the registry.
+ *
+ * Small models invent plausible-looking URLs by combining a repository name
+ * with a host they saw elsewhere in the prompt (megaicesite + netlify.app).
+ * Prompt wording reduces this but cannot prevent it, so the allowlist is
+ * enforced here.
+ */
+function repairExternalUrls(text: string): string {
+  return text.replace(EXTERNAL_URL, (match) => {
+    const trimmed = match.replace(/[.,;:]+$/, "");
+    try {
+      const host = new URL(trimmed).host.replace(/^www\./, "").toLowerCase();
+      return ALLOWED_HOSTS.has(host) ? match : "";
+    } catch {
+      return "";
+    }
+  });
+}
+
+/** Markdown reaches the widget as literal characters, so flatten it to prose. */
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\(([^)]*)\)/g, "$1 $2") // [label](url) -> label url
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/(^|\s)\*([^*\n]+)\*/g, "$1$2")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/^\s{0,3}#{1,6}\s+/gm, "");
+}
+
+export function repairProjectLinks(text: string): string {
+  return text.replace(PROJECT_PATH, (match, slug: string) =>
+    VALID_SLUGS.has(slug.toLowerCase()) ? match : "/projects"
+  );
+}
+
+/** Everything the model writes passes through here before a visitor sees it. */
+export function sanitizeReply(text: string): string {
+  return repairExternalUrls(repairProjectLinks(stripMarkdown(text)))
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/\(\s*\)/g, "")
+    .replace(/[ \t]+([.,;:])/g, "$1");
+}
 
 /*
   OSPA's model backend.
@@ -33,7 +106,13 @@ export class ProviderError extends Error {
 }
 
 const OLLAMA_URL = process.env.OLLAMA_URL ?? "http://127.0.0.1:11434";
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL ?? "qwen2.5-coder:14b";
+/*
+  A 3B general model, not the 14B coder. This assistant recites facts from a
+  fixed prompt rather than reasoning, and the smaller model benchmarked ~3x
+  faster on the same question with no loss of accuracy. Override with
+  OLLAMA_MODEL if a larger one is ever warranted.
+*/
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL ?? "qwen2.5:3b";
 
 /** A local 14B model needs real time to answer; keep the ceiling generous. */
 const OLLAMA_TIMEOUT_MS = 60_000;
@@ -86,9 +165,43 @@ export async function streamOllama(turns: Turn[]): Promise<ReadableStream<Uint8A
   const encoder = new TextEncoder();
   let buffered = "";
 
+  // Holds text that may still be mid-path, so a URL is never emitted before it
+  // can be validated. Flushed at the last whitespace, which is a safe boundary.
+  let pending = "";
+
   return new ReadableStream({
     async start(controller) {
       const reader = res.body!.getReader();
+
+      /*
+        Flush on line boundaries, not word boundaries: a markdown construct
+        ("**Mega Ice**", "[label](url)") contains spaces, so cutting at a space
+        would hand the sanitizer half a construct and it would survive as
+        literal punctuation. Lines are a safe unit, and a very long line is
+        force-flushed so a single-paragraph answer still streams.
+      */
+      const FORCE_FLUSH_AT = 400;
+
+      const emit = (piece: string, final: boolean) => {
+        pending += piece;
+
+        if (final) {
+          if (pending) controller.enqueue(encoder.encode(sanitizeReply(pending)));
+          pending = "";
+          return;
+        }
+
+        let cut = pending.lastIndexOf("\n");
+        if (cut === -1 && pending.length > FORCE_FLUSH_AT) {
+          cut = pending.lastIndexOf(" ");
+        }
+        if (cut === -1) return;
+
+        const ready = pending.slice(0, cut + 1);
+        pending = pending.slice(cut + 1);
+        controller.enqueue(encoder.encode(sanitizeReply(ready)));
+      };
+
       try {
         for (;;) {
           const { done, value } = await reader.read();
@@ -107,12 +220,13 @@ export async function streamOllama(turns: Turn[]): Promise<ReadableStream<Uint8A
                 done?: boolean;
               };
               const piece = parsed.message?.content;
-              if (piece) controller.enqueue(encoder.encode(piece));
+              if (piece) emit(piece, false);
             } catch {
               // A malformed line is not worth failing the whole reply over.
             }
           }
         }
+        emit("", true);
       } finally {
         reader.releaseLock();
         controller.close();

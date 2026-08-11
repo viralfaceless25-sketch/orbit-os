@@ -74,12 +74,17 @@ export function OspaChat() {
 
       const decoder = new TextDecoder();
       let assembled = "";
-      setTurns([...next, { role: "assistant", content: "" }]);
 
       for (;;) {
         const { done, value } = await reader.read();
         if (done) break;
+
         assembled += decoder.decode(value, { stream: true });
+
+        // Drop the waiting indicator as soon as real text exists, otherwise
+        // "Thinking" sits under a reply that is already streaming.
+        if (assembled) setPending(false);
+
         // Replace the trailing assistant turn as it grows.
         setTurns([...next, { role: "assistant", content: assembled }]);
       }
