@@ -1,17 +1,28 @@
-export function Screen6ProofOfWork() {
-  const lines = [
-    "Built a multi-agent AI orchestrator with a live dashboard",
-    "Shipped a 3D-driven jewelry e-commerce storefront",
-    "Building a cross-office diamond inventory system with document extraction",
-    "Developed a native macOS desktop companion app",
-  ];
+import { SectionHeader } from "./SectionHeader";
 
+const OUTPUT = [
+  "Built a multi-agent AI orchestrator with a live dashboard",
+  "Shipped a 3D-driven jewelry e-commerce storefront",
+  "Building a cross-office diamond inventory system with document extraction",
+  "Developed a native macOS desktop companion app",
+];
+
+export function Screen6ProofOfWork() {
   return (
-    <section className="py-16">
-      <h2 className="mb-4 font-mono text-sm text-[--color-text-dim]">RECENT OUTPUT</h2>
-      <ul className="space-y-2 font-mono text-sm">
-        {lines.map((line) => (
-          <li key={line}>{line}</li>
+    <section className="py-20">
+      <SectionHeader index="03" eyebrow="Recent output" title="What has shipped lately" />
+
+      <ul className="space-y-0">
+        {OUTPUT.map((line, i) => (
+          <li
+            key={line}
+            className="grid grid-cols-[2.5rem_1fr] items-baseline gap-4 border-b border-line py-4"
+          >
+            <span className="font-mono text-label text-ink-faint tabular-nums">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span className="text-ink-dim">{line}</span>
+          </li>
         ))}
       </ul>
     </section>

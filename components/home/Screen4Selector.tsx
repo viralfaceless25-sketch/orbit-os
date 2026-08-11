@@ -1,67 +1,96 @@
 "use client";
 import { useState } from "react";
 import { projects } from "@/data/projects";
+import { SectionHeader } from "./SectionHeader";
 
 const MODULES = [
   {
-    label: "Website",
-    description: "Marketing sites, portfolio sites, platforms, dashboards, and web applications.",
-    matches: (category: string) => category === "web",
+    label: "A website",
+    description: "Marketing sites, platforms, dashboards, and web applications.",
+    category: "web" as const,
   },
   {
-    label: "AI System",
-    description: "AI assistants, automation workflows, knowledge systems, and custom tools.",
-    matches: (category: string) => category === "ai",
+    label: "An AI system",
+    description: "Assistants, automation workflows, knowledge systems, custom tools.",
+    category: "ai" as const,
   },
   {
-    label: "Product Prototype",
-    description: "Turn an early idea into something functional, testable, and presentable.",
-    matches: (category: string) => category === "prototype",
+    label: "A prototype",
+    description: "Turn an early idea into something functional and testable.",
+    category: "prototype" as const,
   },
   {
-    label: "Technical Support",
-    description: "Architecture, integrations, debugging, deployment, and product development help.",
-    matches: () => false,
+    label: "Technical help",
+    description: "Architecture, integrations, debugging, and deployment.",
+    category: null,
   },
-] as const;
+];
 
 export function Screen4Selector() {
-  const [selected, setSelected] = useState<(typeof MODULES)[number]["label"] | null>(null);
-  const activeModule = MODULES.find((m) => m.label === selected);
-  const matches = activeModule ? projects.filter((p) => activeModule.matches(p.category)) : [];
+  const [selected, setSelected] = useState<string | null>(null);
+  const active = MODULES.find((m) => m.label === selected);
+  const matches = active?.category
+    ? projects.filter((p) => p.category === active.category)
+    : [];
 
   return (
-    <section className="mx-auto max-w-3xl py-16">
-      <h2 className="mb-6 text-2xl font-display">What are you trying to build?</h2>
-      <div className="grid gap-3 sm:grid-cols-2">
-        {MODULES.map((m) => (
-          <button
-            key={m.label}
-            onClick={() => setSelected(m.label)}
-            className="rounded border border-white/10 p-4 text-left hover:border-white/30"
-          >
-            <p className="font-medium">{m.label}</p>
-            <p className="mt-1 text-sm text-[--color-text-dim]">{m.description}</p>
-          </button>
-        ))}
+    <section className="py-20">
+      <SectionHeader index="02" eyebrow="Start here" title="What are you trying to build?" />
+
+      <div className="grid gap-px bg-line sm:grid-cols-2">
+        {MODULES.map((m) => {
+          const isActive = selected === m.label;
+          return (
+            <button
+              key={m.label}
+              onClick={() => setSelected(isActive ? null : m.label)}
+              aria-pressed={isActive}
+              className={`bg-graphite p-6 text-left outline-none transition-colors hover:bg-panel ${
+                isActive ? "bg-panel" : ""
+              }`}
+            >
+              <p className="font-display text-lg font-medium">{m.label}</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink-dim">{m.description}</p>
+            </button>
+          );
+        })}
       </div>
-      {activeModule && (
-        <div className="mt-6 font-mono text-sm">
-          <p>You selected: {activeModule.label}</p>
+
+      {active && (
+        <div className="mt-6 border-l-2 border-line-bright pl-5">
           {matches.length > 0 ? (
-            <ul className="mt-2 space-y-1">
-              {matches.map((p) => (
-                <li key={p.slug}>
-                  {"→ "}
-                  <span>{p.title}</span>
-                </li>
-              ))}
-            </ul>
+            <>
+              <p className="font-mono text-label uppercase text-ink-faint">
+                Relevant work
+              </p>
+              <ul className="mt-3 space-y-2">
+                {matches.map((p) => (
+                  <li key={p.slug}>
+                    <a
+                      href={`/projects/${p.slug}`}
+                      className="group flex items-baseline gap-3 outline-none"
+                    >
+                      <span className="font-display font-medium transition-colors group-hover:text-ink">
+                        {p.title}
+                      </span>
+                      <span className="text-sm text-ink-dim">{p.oneLiner}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </>
           ) : (
-            <p className="mt-2 text-[--color-text-dim]">
-              → Get in touch — this is exactly the kind of work I take on.
+            <p className="text-sm text-ink-dim">
+              This is exactly the kind of work I take on — there is no public case study for
+              it yet.
             </p>
           )}
+          <a
+            href={`/start-a-project${active.category ? `?interest=${active.category}` : ""}`}
+            className="mt-5 inline-block font-mono text-label uppercase text-ink-faint transition-colors hover:text-ink"
+          >
+            Start this conversation →
+          </a>
         </div>
       )}
     </section>

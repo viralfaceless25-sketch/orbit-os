@@ -2,26 +2,99 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+  ORBIT OS design tokens — "precision instrument" direction.
+  Warm graphite base (not blue-black), hairline structure, category accents
+  used only as small status indicators. See spec §11.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surfaces — warm near-black, reads physical rather than screen-blue */
+  --color-graphite: #0c0c0e;
+  --color-panel: #121317;
+  --color-panel-raised: #1a1c21;
+
+  /* Structure */
+  --color-line: #26282f;
+  --color-line-bright: #34373f;
+
+  /* Text */
+  --color-text: #e8e6e3;
+  --color-text-dim: #8a8c93;
+  --color-text-faint: #55575e;
+
+  /* Category accents — status indicators only, never large fills */
+  --color-accent-ai: #7c5cff;
+  --color-accent-web: #3fd0e0;
+  --color-accent-client: #e0a63f;
+  --color-accent-oss: #4fd07a;
+  --color-accent-exp: #ff7a5c;
+
+  /* Blueprint grid */
+  --grid-size: 32px;
+  --grid-line: rgba(255, 255, 255, 0.022);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-graphite);
+  color: var(--color-text);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv05";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* The grid is structural, not texture — content aligns to it */
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+}
+
+/* Monospace carries all system data: labels, status, metadata, ticks */
+.font-mono,
+[class*="font-mono"] {
+  font-feature-settings: "zero", "ss02";
+}
+
+/* Focus: visible, instrument-like, never removed */
+:focus-visible {
+  outline: 1px solid var(--color-text);
+  outline-offset: 3px;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Hairline rule that reads as a machined edge */
+  .rule-t {
+    border-top: 1px solid var(--color-line);
+  }
+
+  /* Measurement tick used by the scroll rail and section headers */
+  .tick::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 1px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background: var(--color-line-bright);
+  }
+}
+
+/* Motion is opt-out by system preference (spec §12) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

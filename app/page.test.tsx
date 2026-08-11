@@ -14,9 +14,9 @@ describe("Homepage", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("Keyush Patel", { exact: false })).toBeInTheDocument();
     expect(screen.getByText("What are you trying to build?")).toBeInTheDocument();
-    expect(screen.getByText("Featured")).toBeInTheDocument();
-    expect(screen.getByText("RECENT OUTPUT")).toBeInTheDocument();
+    expect(screen.getByText("What these systems solved")).toBeInTheDocument();
+    expect(screen.getByText("What has shipped lately")).toBeInTheDocument();
     expect(screen.getByText("Process")).toBeInTheDocument();
-    expect(screen.getByText("HAVE AN IDEA?")).toBeInTheDocument();
+    expect(screen.getByText("Have an idea?")).toBeInTheDocument();
   });
 });

@@ -32,8 +32,8 @@ describe("OSShell", () => {
       </OSShell>
     );
     await user.click(screen.getByLabelText("Open command palette"));
-    expect(screen.getByPlaceholderText("Type a command...")).toBeInTheDocument();
-    await user.type(screen.getByPlaceholderText("Type a command..."), "github");
+    expect(screen.getByPlaceholderText("Search commands")).toBeInTheDocument();
+    await user.type(screen.getByPlaceholderText("Search commands"), "github");
     expect(screen.getByText("Open GitHub")).toBeInTheDocument();
     expect(screen.queryByText("Read about me")).not.toBeInTheDocument();
   });

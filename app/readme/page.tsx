@@ -80,15 +80,15 @@ export default function ReadmePage() {
   ];
 
   return (
-    <div className="mx-auto max-w-2xl space-y-10 py-12 font-mono text-sm">
+    <div className="max-w-2xl space-y-10 py-12 font-mono text-sm">
       {sections.map((s) => (
         <section key={s.id}>
-          <p className="mb-2 text-xs text-[--color-text-dim]">/{s.id}</p>
+          <p className="mb-2 text-xs text-ink-dim">/{s.id}</p>
           <div className="font-sans text-base">{s.body}</div>
         </section>
       ))}
       <section>
-        <p className="mb-2 text-xs text-[--color-text-dim]">/timeline</p>
+        <p className="mb-2 text-xs text-ink-dim">/timeline</p>
         <ul className="space-y-1 font-sans">
           {timeline.map((t) => (
             <li key={t}>{t}</li>

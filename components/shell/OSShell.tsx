@@ -1,21 +1,42 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TopBar } from "./TopBar";
 import { SideDock } from "./SideDock";
 import { SystemStatus } from "./SystemStatus";
 import { CommandPalette } from "./CommandPalette";
+import { AmbientField } from "@/components/fx/AmbientField";
+import { Atmosphere } from "@/components/fx/Atmosphere";
+import { SmoothScroll } from "@/components/fx/SmoothScroll";
 
 export function OSShell({ children }: { children: React.ReactNode }) {
   const [paletteOpen, setPaletteOpen] = useState(false);
 
+  // ⌘K / Ctrl+K opens the palette — the shortcut the top bar advertises.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setPaletteOpen((open) => !open);
+      }
+      if (e.key === "Escape") setPaletteOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-[--color-graphite] text-[--color-text]">
+    <div className="min-h-screen">
+      <SmoothScroll />
+      <AmbientField />
+      <Atmosphere />
       <TopBar onOpenPalette={() => setPaletteOpen(true)} />
       <SideDock />
-      <main className="px-4 py-6 md:pl-20">{children}</main>
-      <div className="fixed bottom-4 right-4 hidden md:block">
-        <SystemStatus />
-      </div>
+
+      {/* Single content spine — every section aligns to this, nothing wanders */}
+      <main className="mx-auto w-full max-w-5xl px-5 pb-32 lg:pl-24">{children}</main>
+
+      <SystemStatus />
+
       {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}
     </div>
   );

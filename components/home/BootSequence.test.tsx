@@ -11,7 +11,7 @@ describe("BootSequence", () => {
   it("shows the boot lines then calls onDone", () => {
     const onDone = vi.fn();
     render(<BootSequence onDone={onDone} />);
-    expect(screen.getByText("INITIALIZING ORBIT OS...")).toBeInTheDocument();
+    expect(screen.getByText("Initializing ORBIT OS")).toBeInTheDocument();
     act(() => {
       vi.advanceTimersByTime(1200);
     });

@@ -36,7 +36,7 @@ function StartAProjectContent() {
 
   if (reference) {
     return (
-      <div className="mx-auto max-w-md space-y-2 py-12 font-mono text-sm">
+      <div className="max-w-md space-y-2 py-12 font-mono text-sm">
         <p>SENT — reference {reference}</p>
         <p className="text-[--color-text-dim]">I&apos;ll get back to you shortly.</p>
       </div>
@@ -45,7 +45,7 @@ function StartAProjectContent() {
 
   return (
     <div>
-      {error && <p className="mx-auto max-w-md pt-8 text-sm text-red-400">{error}</p>}
+      {error && <p className="max-w-md pt-8 text-sm text-red-400">{error}</p>}
       <InquiryFlow onSubmit={handleSubmit} initialInterest={initialInterest} />
     </div>
   );

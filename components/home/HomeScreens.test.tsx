@@ -15,7 +15,7 @@ describe("Screen2Intro", () => {
     expect(
       screen.getByText("A living system of websites, AI products, experiments, and ideas.")
     ).toBeInTheDocument();
-    expect(screen.getByText("Explore Projects")).toBeInTheDocument();
+    expect(screen.getByText("Explore projects")).toBeInTheDocument();
     expect(screen.getByText("Start a Project")).toBeInTheDocument();
   });
 });
@@ -31,16 +31,16 @@ describe("Screen3Profile", () => {
 describe("Screen4Selector", () => {
   it("shows the four build-type modules", () => {
     render(<Screen4Selector />);
-    expect(screen.getByText("Website")).toBeInTheDocument();
-    expect(screen.getByText("AI System")).toBeInTheDocument();
-    expect(screen.getByText("Product Prototype")).toBeInTheDocument();
-    expect(screen.getByText("Technical Support")).toBeInTheDocument();
+    expect(screen.getByText("A website")).toBeInTheDocument();
+    expect(screen.getByText("An AI system")).toBeInTheDocument();
+    expect(screen.getByText("A prototype")).toBeInTheDocument();
+    expect(screen.getByText("Technical help")).toBeInTheDocument();
   });
 
   it("reveals matching projects when a module is selected", async () => {
     const user = userEvent.setup();
     render(<Screen4Selector />);
-    await user.click(screen.getByText("AI System"));
+    await user.click(screen.getByText("An AI system"));
     expect(screen.getByText("AMS")).toBeInTheDocument();
     expect(screen.getByText("OSPA")).toBeInTheDocument();
   });
@@ -69,8 +69,8 @@ describe("Screen6ProofOfWork", () => {
 describe("Screen7Process", () => {
   it("shows all five process stages", () => {
     render(<Screen7Process />);
-    for (const stage of ["DISCOVER", "PROTOTYPE", "BUILD", "LAUNCH", "IMPROVE"]) {
-      expect(screen.getByText(new RegExp(stage))).toBeInTheDocument();
+    for (const stage of ["Discover", "Prototype", "Build", "Launch", "Improve"]) {
+      expect(screen.getByText(stage)).toBeInTheDocument();
     }
   });
 });
@@ -78,7 +78,7 @@ describe("Screen7Process", () => {
 describe("Screen8FinalCTA", () => {
   it("shows the final inquiry prompt and CTA", () => {
     render(<Screen8FinalCTA />);
-    expect(screen.getByText("HAVE AN IDEA?")).toBeInTheDocument();
+    expect(screen.getByText("Have an idea?")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Start a Project" })).toHaveAttribute(
       "href",
       "/start-a-project"
