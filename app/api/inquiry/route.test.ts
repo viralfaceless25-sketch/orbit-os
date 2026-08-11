@@ -9,9 +9,23 @@ vi.mock("resend", () => ({
   }),
 }));
 
+function validRequest() {
+  return new NextRequest("http://localhost/api/inquiry", {
+    method: "POST",
+    body: JSON.stringify({
+      interest: "Website",
+      stage: "Just an idea",
+      outcome: "A working site",
+      timeline: "Within one month",
+      contact: "me@example.com",
+    }),
+  });
+}
+
 describe("POST /api/inquiry", () => {
   beforeEach(() => {
-    sendMock.mockClear();
+    sendMock.mockReset();
+    sendMock.mockResolvedValue({ data: { id: "email_123" }, error: null });
     process.env.RESEND_API_KEY = "test-key";
     process.env.INQUIRY_TO_EMAIL = "owner@example.com";
   });
@@ -44,5 +58,40 @@ describe("POST /api/inquiry", () => {
     expect(body.reference).toMatch(/^PRJ-\d{4}-\d{3}$/);
     expect(sendMock).toHaveBeenCalledTimes(1);
     expect(sendMock.mock.calls[0][0].to).toBe("owner@example.com");
+  });
+});
+
+describe("POST /api/inquiry delivery failures", () => {
+  beforeEach(() => {
+    sendMock.mockReset();
+    process.env.RESEND_API_KEY = "test-key";
+    process.env.INQUIRY_TO_EMAIL = "owner@example.com";
+  });
+
+  it("reports failure when the email provider rejects the send", async () => {
+    // Regression: the SDK resolves with { data, error } instead of throwing, so
+    // an unchecked call reported success while nothing was ever delivered.
+    sendMock.mockResolvedValue({
+      data: null,
+      error: { name: "validation_error", message: "domain not verified" },
+    });
+
+    const { POST } = await import("./route");
+    const res = await POST(validRequest());
+    const body = await res.json();
+
+    expect(res.status).toBe(502);
+    expect(body.reference).toBeUndefined();
+    expect(body.error).toBeTruthy();
+  });
+
+  it("reports failure when the provider is not configured", async () => {
+    delete process.env.RESEND_API_KEY;
+
+    const { POST } = await import("./route");
+    const res = await POST(validRequest());
+
+    expect(res.status).toBe(503);
+    expect(sendMock).not.toHaveBeenCalled();
   });
 });

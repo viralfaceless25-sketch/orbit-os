@@ -7,6 +7,7 @@ import { CommandPalette } from "./CommandPalette";
 import { AmbientField } from "@/components/fx/AmbientField";
 import { Atmosphere } from "@/components/fx/Atmosphere";
 import { SmoothScroll } from "@/components/fx/SmoothScroll";
+import { OspaChat } from "@/components/ospa/OspaChat";
 
 export function OSShell({ children }: { children: React.ReactNode }) {
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -36,6 +37,8 @@ export function OSShell({ children }: { children: React.ReactNode }) {
       <main className="mx-auto w-full max-w-6xl px-6 pb-32 lg:px-16">{children}</main>
 
       <SystemStatus />
+
+      <OspaChat />
 
       {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}
     </div>
