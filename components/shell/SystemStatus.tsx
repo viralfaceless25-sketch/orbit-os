@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 /*
-  Footer readout rather than a floating overlay — it sat on top of the builder
+  Footer readout rather than a floating overlay. It sat on top of the builder
   profile before. Reads as the instrument's baseplate: hairline rule, data in
   mono, values right-aligned so they scan as a column.
 */

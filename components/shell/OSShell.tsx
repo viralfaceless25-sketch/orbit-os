@@ -11,7 +11,7 @@ import { SmoothScroll } from "@/components/fx/SmoothScroll";
 export function OSShell({ children }: { children: React.ReactNode }) {
   const [paletteOpen, setPaletteOpen] = useState(false);
 
-  // ⌘K / Ctrl+K opens the palette — the shortcut the top bar advertises.
+  // ⌘K / Ctrl+K opens the palette. The shortcut the top bar advertises.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key.toLowerCase() === "k" && (e.metaKey || e.ctrlKey)) {
@@ -32,8 +32,8 @@ export function OSShell({ children }: { children: React.ReactNode }) {
       <TopBar onOpenPalette={() => setPaletteOpen(true)} />
       <SideDock />
 
-      {/* Single content spine — every section aligns to this, nothing wanders */}
-      <main className="mx-auto w-full max-w-5xl px-5 pb-32 lg:pl-24">{children}</main>
+      {/* Single content spine. Every section aligns to this, nothing wanders */}
+      <main className="mx-auto w-full max-w-6xl px-6 pb-32 lg:px-16">{children}</main>
 
       <SystemStatus />
 

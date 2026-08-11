@@ -1,4 +1,4 @@
-import { SectionHeader } from "./SectionHeader";
+import { Section } from "./Section";
 import { RevealStagger } from "@/components/fx/Reveal";
 
 const OUTPUT = [
@@ -10,8 +10,7 @@ const OUTPUT = [
 
 export function Screen6ProofOfWork() {
   return (
-    <section className="py-20">
-      <SectionHeader index="03" eyebrow="Recent output" title="What has shipped lately" />
+    <Section index="03" eyebrow="Recent output" title="What has shipped lately">
 
       <RevealStagger>
         {OUTPUT.map((line, i) => (
@@ -26,6 +25,6 @@ export function Screen6ProofOfWork() {
           </div>
         ))}
       </RevealStagger>
-    </section>
+    </Section>
   );
 }

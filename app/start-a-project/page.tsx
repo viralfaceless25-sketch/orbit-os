@@ -27,7 +27,7 @@ function StartAProjectContent() {
       body: JSON.stringify(state),
     });
     if (!res.ok) {
-      setError("Something went wrong sending that — try the email link below instead.");
+      setError("That did not send. Use the email link below instead.");
       return;
     }
     const body = await res.json();
@@ -37,7 +37,7 @@ function StartAProjectContent() {
   if (reference) {
     return (
       <div className="max-w-md space-y-2 py-12 font-mono text-sm">
-        <p>SENT — reference {reference}</p>
+        <p>SENT · reference {reference}</p>
         <p className="text-[--color-text-dim]">I&apos;ll get back to you shortly.</p>
       </div>
     );

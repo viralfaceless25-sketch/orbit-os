@@ -8,7 +8,7 @@ import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
   are read top to bottom), so the numbering encodes sequence rather than
   decorating it.
 
-  The underline draws itself as the header enters view — the section reads as
+  The underline draws itself as the header enters view. The section reads as
   being brought online rather than simply appearing.
 */
 export function SectionHeader({

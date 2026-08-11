@@ -5,7 +5,7 @@ import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
 /*
   Scroll-triggered reveal. Content lifts and resolves into place once, when it
-  first enters view — the page assembles itself as you descend rather than
+  first enters view. The page assembles itself as you descend rather than
   animating on every pass.
 */
 export function Reveal({
@@ -36,7 +36,7 @@ export function Reveal({
   );
 }
 
-/* Staggered list reveal — rows resolve in sequence, like a readout populating. */
+/* Staggered list reveal. Rows resolve in sequence, like a readout populating. */
 export function RevealStagger({
   children,
   className,

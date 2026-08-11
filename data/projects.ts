@@ -29,7 +29,7 @@ export const projects: Project[] = [
     tier: "featured",
     oneLiner: "Coordinates multiple AI agents from one orchestrator dashboard.",
     status: "in-development",
-    role: "Sole builder — architecture, orchestrator, dashboard.",
+    role: "Sole builder. Architecture, orchestrator, dashboard.",
     problem:
       "Running several AI agents on real work meant juggling separate terminals, logs, and state with no shared view of what each agent was doing or had access to.",
     contribution:
@@ -54,7 +54,7 @@ export const projects: Project[] = [
     tier: "featured",
     oneLiner: "A native macOS companion that helps non-technical people use their computer safely.",
     status: "in-development",
-    role: "Sole builder — native app, interaction and consent model.",
+    role: "Sole builder. Native app, interaction and consent model.",
     problem:
       "Non-technical users need help operating their computer, but giving an AI agent broad control of a real desktop is risky without hard limits on what it can see and do.",
     contribution:
@@ -107,7 +107,7 @@ export const projects: Project[] = [
     tier: "featured",
     oneLiner: "Shared diamond inventory and request system across three offices.",
     status: "in-development",
-    role: "Sole builder — backend, frontend, desktop app.",
+    role: "Sole builder. Backend, frontend, desktop app.",
     problem:
       "Sales reps in NY, Chicago, and LA were browsing separate, disconnected stock, so requests for the same stone could collide, and inventory staff had no single source of truth for what was in stock, on memo, on hold, or already requested.",
     contribution:

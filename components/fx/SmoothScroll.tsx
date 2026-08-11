@@ -6,8 +6,8 @@ import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
 /*
   Momentum scrolling, and the source of the velocity signal that drives the
-  ambient field's light-streak effect. Disabled entirely under reduced motion —
-  hijacking scroll is exactly what that preference is asking us not to do.
+  ambient field's light-streak effect. Disabled entirely under reduced motion,
+  since hijacking scroll is what that preference asks us not to do.
 */
 export function SmoothScroll() {
   const reduced = usePrefersReducedMotion();

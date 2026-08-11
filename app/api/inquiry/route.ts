@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
   await resend.emails.send({
     from: "ORBIT OS <onboarding@resend.dev>",
     to: process.env.INQUIRY_TO_EMAIL ?? "",
-    subject: `New project inquiry — ${reference}`,
+    subject: `New project inquiry ${reference}`,
     text: [
       `Reference: ${reference}`,
       `Interested in: ${body.interest}`,

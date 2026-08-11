@@ -5,8 +5,8 @@ import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/\\<>[]{}*#%$";
 
 /*
-  Decode-in effect: text resolves from noise, left to right. Used sparingly —
-  once, on the piece of text that should feel like it is coming online.
+  Decode-in effect: text resolves from noise, left to right. Used sparingly,
+  and only on text that should feel like it is coming online.
 
   Accessibility: the real string stays in the DOM for screen readers; only the
   visual layer scrambles.

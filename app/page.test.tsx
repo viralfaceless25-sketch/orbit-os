@@ -16,7 +16,7 @@ describe("Homepage", () => {
     expect(screen.getByText("What are you trying to build?")).toBeInTheDocument();
     expect(screen.getByText("What these systems solved")).toBeInTheDocument();
     expect(screen.getByText("What has shipped lately")).toBeInTheDocument();
-    expect(screen.getByText("Process")).toBeInTheDocument();
+    expect(screen.getByText("How a project runs")).toBeInTheDocument();
     expect(screen.getByText("Have an idea?")).toBeInTheDocument();
   });
 });

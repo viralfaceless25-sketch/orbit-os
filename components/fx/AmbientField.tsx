@@ -4,7 +4,7 @@ import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 import { scrollSignal } from "@/lib/scroll-signal";
 
 /*
-  Ambient node network — the visual metaphor for the work itself: independent
+  Ambient node network. The visual metaphor for the work itself: independent
   systems that find each other and hold a connection.
 
   Nodes drift on three parallax planes. An edge is drawn when two nodes on the
@@ -12,7 +12,7 @@ import { scrollSignal } from "@/lib/scroll-signal";
   lattice continuously forms and dissolves rather than sitting static.
 
   Scroll velocity (from Lenis, via scrollSignal.warp) stretches nodes along the
-  travel axis and thins the edges — fast movement reads as motion blur through
+  travel axis and thins the edges. Fast movement reads as motion blur through
   a field, and it settles the moment you stop.
 
   Canvas, one rAF loop, DPR-capped, paused when the tab is hidden.
@@ -74,7 +74,7 @@ export function AmbientField() {
 
       const warp = reduced ? 0 : scrollSignal.warp;
       const dir = scrollSignal.velocity >= 0 ? 1 : -1;
-      // Streak length stays modest — this should read as motion, not as a
+      // Streak length stays modest. This should read as motion, not as a
       // gaming hyperspace tunnel.
       const streak = warp * 34 * dir;
 

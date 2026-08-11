@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { SectionHeader } from "./SectionHeader";
+import { Section } from "./Section";
 
 /* Numbering is real here: these stages happen in this order. */
 const STAGES = [
@@ -9,7 +9,7 @@ const STAGES = [
     name: "Discover",
     short: "Clarify the idea, audience, and objective.",
     detail:
-      "We get specific about what you are actually solving, who it is for, and what success looks like — before any code gets written.",
+      "We get specific about what you are actually solving, who it is for, and what success looks like, before any code gets written.",
   },
   {
     id: "02",
@@ -42,8 +42,7 @@ export function Screen7Process() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <section className="py-20">
-      <SectionHeader index="04" eyebrow="How it runs" title="Process" />
+    <Section index="04" eyebrow="How it runs" title="How a project runs">
 
       <div className="border-t border-line">
         {STAGES.map((stage) => {
@@ -80,6 +79,6 @@ export function Screen7Process() {
           );
         })}
       </div>
-    </section>
+    </Section>
   );
 }

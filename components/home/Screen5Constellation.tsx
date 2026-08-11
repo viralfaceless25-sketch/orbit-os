@@ -1,5 +1,5 @@
 import { projects } from "@/data/projects";
-import { SectionHeader } from "./SectionHeader";
+import { Section } from "./Section";
 import { RevealStagger } from "@/components/fx/Reveal";
 
 const ACCENT: Record<string, string> = {
@@ -20,8 +20,12 @@ export function Screen5Constellation() {
   const featured = projects.filter((p) => p.tier === "featured");
 
   return (
-    <section id="projects" className="scroll-mt-20 py-20">
-      <SectionHeader index="01" eyebrow="Selected work" title="What these systems solved" />
+    <Section
+      id="projects"
+      index="01"
+      eyebrow="Selected work"
+      title="What these systems solved"
+    >
 
       <RevealStagger className="grid gap-4 sm:grid-cols-2">
         {featured.map((p) => (
@@ -43,7 +47,7 @@ export function Screen5Constellation() {
 
             <h3 className="font-display text-xl font-medium">{p.title}</h3>
 
-            {/* The problem is what a client recognises — lead with it, not the stack. */}
+            {/* The problem is what a client recognises. Lead with it, not the stack. */}
             <p className="text-sm leading-relaxed text-ink-dim">{p.problem}</p>
 
             <div className="mt-auto flex items-baseline gap-3 pt-2">
@@ -53,7 +57,7 @@ export function Screen5Constellation() {
               <span className="text-sm leading-relaxed text-ink">{p.outcome[0]}</span>
             </div>
 
-            {/* Stack readout — the technical fingerprint of the system */}
+            {/* Stack readout. The technical fingerprint of the system */}
             <ul className="flex flex-wrap gap-x-3 gap-y-1 border-t border-line pt-4">
               {p.techStack.slice(0, 4).map((t) => (
                 <li key={t} className="font-mono text-label uppercase text-ink-faint">
@@ -73,6 +77,6 @@ export function Screen5Constellation() {
           </a>
         ))}
       </RevealStagger>
-    </section>
+    </Section>
   );
 }

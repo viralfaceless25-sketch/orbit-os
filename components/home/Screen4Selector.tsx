@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { projects } from "@/data/projects";
-import { SectionHeader } from "./SectionHeader";
+import { Section } from "./Section";
 
 const MODULES = [
   {
@@ -34,8 +34,7 @@ export function Screen4Selector() {
     : [];
 
   return (
-    <section className="py-20">
-      <SectionHeader index="02" eyebrow="Start here" title="What are you trying to build?" />
+    <Section index="02" eyebrow="Start here" title="What are you trying to build?">
 
       <div className="grid gap-4 sm:grid-cols-2">
         {MODULES.map((m) => {
@@ -83,7 +82,7 @@ export function Screen4Selector() {
             </>
           ) : (
             <p className="text-sm text-ink-dim">
-              This is exactly the kind of work I take on — there is no public case study for
+              This is exactly the kind of work I take on. There is no public case study for
               it yet.
             </p>
           )}
@@ -95,6 +94,6 @@ export function Screen4Selector() {
           </a>
         </div>
       )}
-    </section>
+    </Section>
   );
 }

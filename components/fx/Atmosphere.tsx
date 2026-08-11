@@ -4,7 +4,7 @@ import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
 /*
   Screen atmosphere: a cursor-tracked light, fine scanlines, and a vignette.
-  All non-interactive overlays. Kept very low contrast — these should register
+  All non-interactive overlays. Kept very low contrast. These should register
   as depth, never as a filter sitting on top of the content.
 */
 export function Atmosphere() {
@@ -34,7 +34,7 @@ export function Atmosphere() {
         />
       )}
 
-      {/* Scanlines — 3px pitch, barely there */}
+      {/* Scanlines. 3px pitch, barely there */}
       <div
         aria-hidden
         className="pointer-events-none fixed inset-0 z-[60] opacity-[0.5]"
@@ -44,7 +44,7 @@ export function Atmosphere() {
         }}
       />
 
-      {/* Vignette — pulls focus to the centre column */}
+      {/* Vignette. Pulls focus to the centre column */}
       <div
         aria-hidden
         className="pointer-events-none fixed inset-0 z-[59]"

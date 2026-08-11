@@ -8,7 +8,7 @@
 export const scrollSignal = {
   /** Current scroll offset in px. */
   y: 0,
-  /** Instantaneous scroll velocity — signed, px per frame-ish. */
+  /** Instantaneous scroll velocity. Signed, px per frame-ish. */
   velocity: 0,
   /** Smoothed absolute velocity in 0..1, used to drive the streak effect. */
   warp: 0,

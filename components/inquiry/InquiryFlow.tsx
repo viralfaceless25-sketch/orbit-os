@@ -73,7 +73,7 @@ export function InquiryFlow({
         Tell me what you are building.
       </h1>
       <p className="mt-4 text-sm leading-relaxed text-ink-dim">
-        Five short questions. No finished spec required — a rough idea is enough.
+        Five short questions. No finished spec required. A rough idea is enough.
       </p>
 
       {state.step !== "review" && (

@@ -2,7 +2,7 @@
 
 /*
   Instrument rail, not a fake app dock. Each entry is a measurement tick with a
-  label that reveals on hover — the rail reads as a calibrated scale down the
+  label that reveals on hover. The rail reads as a calibrated scale down the
   page edge rather than a row of mystery icons.
 */
 const ITEMS = [

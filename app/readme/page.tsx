@@ -29,7 +29,7 @@ export default function ReadmePage() {
       id: "how-i-work",
       body: (
         <p>
-          Fast, collaborative, and hands-on with the whole stack — design, frontend, backend,
+          Fast, collaborative, and hands-on across the whole stack: design, frontend, backend,
           and deployment. I work directly with whoever has the idea, not through a long chain of
           handoffs.
         </p>
@@ -39,8 +39,8 @@ export default function ReadmePage() {
       id: "currently-building",
       body: (
         <p>
-          ORBIT OS (this site), AMS — a multi-agent orchestrator, DIMS — a cross-office diamond
-          inventory system, and OSPA — a native macOS companion for non-technical users.
+          ORBIT OS (this site). AMS, a multi-agent orchestrator. DIMS, a cross-office diamond
+          inventory system. OSPA, a native macOS companion for non-technical users.
         </p>
       ),
     },
@@ -55,7 +55,7 @@ export default function ReadmePage() {
     },
     {
       id: "outside-code",
-      body: <p>Still figuring out the best way to say this — check back soon.</p>,
+      body: <p>Still figuring out the best way to say this. Check back soon.</p>,
     },
     {
       id: "contact",
