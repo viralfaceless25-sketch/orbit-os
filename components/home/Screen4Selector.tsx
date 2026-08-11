@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { projects } from "@/data/projects";
 import { Section } from "./Section";
@@ -71,7 +72,7 @@ export function Screen4Selector() {
               <ul className="mt-3 space-y-2">
                 {matches.map((p) => (
                   <li key={p.slug}>
-                    <a
+                    <Link
                       href={`/projects/${p.slug}`}
                       className="group flex items-baseline gap-3 outline-none"
                     >
@@ -79,7 +80,7 @@ export function Screen4Selector() {
                         {p.title}
                       </span>
                       <span className="text-sm text-ink-dim">{p.oneLiner}</span>
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -90,12 +91,12 @@ export function Screen4Selector() {
               it yet.
             </p>
           )}
-          <a
+          <Link
             href={`/start-a-project${active.category ? `?interest=${active.category}` : ""}`}
             className="mt-5 inline-block font-mono text-label uppercase text-ink-faint transition-colors hover:text-ink"
           >
             Start this conversation →
-          </a>
+          </Link>
         </div>
       )}
     </Section>

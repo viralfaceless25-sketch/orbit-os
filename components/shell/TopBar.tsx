@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
@@ -18,15 +19,15 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
     <header className="sticky top-0 z-40 border-b border-line bg-graphite/80 backdrop-blur-xl">
       <div className="grid h-20 grid-cols-[1fr_auto_1fr] items-center gap-6 px-6">
         <nav className="hidden items-center gap-7 font-mono text-label uppercase text-ink-dim md:flex">
-          <a href="/projects" className="transition-colors hover:text-ink">
+          <Link href="/projects" className="transition-colors hover:text-ink">
             Projects
-          </a>
-          <a href="/capabilities" className="transition-colors hover:text-ink">
+          </Link>
+          <Link href="/capabilities" className="transition-colors hover:text-ink">
             Capabilities
-          </a>
-          <a href="/readme" className="transition-colors hover:text-ink">
+          </Link>
+          <Link href="/readme" className="transition-colors hover:text-ink">
             README
-          </a>
+          </Link>
         </nav>
 
         {/*
@@ -34,7 +35,7 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
           between the person and the system. Fixed height with both labels
           stacked in place, so the rotation never nudges the layout.
         */}
-        <a
+        <Link
           href="/"
           aria-label="ORBIT OS, Keyush Patel"
           className="group relative col-start-2 block h-9 w-[16rem] overflow-hidden text-center outline-none sm:w-[20rem]"
@@ -67,7 +68,7 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
             aria-hidden
             className="absolute bottom-0 left-1/2 h-px w-16 -translate-x-1/2 bg-line-bright opacity-60"
           />
-        </a>
+        </Link>
 
         <div className="col-start-3 flex items-center justify-end gap-3">
           <span className="hidden items-center gap-2 font-mono text-label uppercase text-ink-dim lg:flex">
@@ -84,12 +85,12 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
           >
             ⌘K
           </button>
-          <a
+          <Link
             href="/start-a-project"
             className="hidden rounded-sm bg-ink px-4 py-2 font-mono text-label uppercase text-graphite transition-opacity hover:opacity-85 sm:block"
           >
             Start a Project
-          </a>
+          </Link>
         </div>
       </div>
     </header>

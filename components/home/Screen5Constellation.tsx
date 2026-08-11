@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { projects } from "@/data/projects";
 import { Section } from "./Section";
 import { RevealStagger } from "@/components/fx/Reveal";
@@ -29,7 +30,7 @@ export function Screen5Constellation() {
 
       <RevealStagger className="grid gap-4 sm:grid-cols-2">
         {featured.map((p) => (
-          <a
+          <Link
             key={p.slug}
             href={`/projects/${p.slug}`}
             className="hud group flex h-full flex-col gap-4 border border-line bg-graphite/60 p-6 outline-none backdrop-blur-sm transition-colors hover:border-line-bright hover:bg-panel/80"
@@ -76,16 +77,16 @@ export function Screen5Constellation() {
             <span className="font-mono text-label uppercase text-ink-dim transition-colors group-hover:text-ink">
               Read the case →
             </span>
-          </a>
+          </Link>
         ))}
       </RevealStagger>
 
-      <a
+      <Link
         href="/projects"
         className="mt-8 inline-block font-mono text-label uppercase text-ink-dim transition-colors hover:text-ink"
       >
         View all {projects.length} projects &rarr;
-      </a>
+      </Link>
     </Section>
   );
 }

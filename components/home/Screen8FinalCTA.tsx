@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Reveal } from "@/components/fx/Reveal";
 
 export function Screen8FinalCTA() {
@@ -11,12 +12,12 @@ export function Screen8FinalCTA() {
         Tell me what you are trying to build and where you are stuck. We can shape it from
         there.
       </p>
-      <a
+      <Link
         href="/start-a-project"
         className="mt-9 inline-block rounded-sm bg-ink px-6 py-3 font-mono text-label uppercase text-graphite transition-opacity hover:opacity-85"
       >
         Start a Project
-      </a>
+      </Link>
     </Reveal>
   );
 }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { projects } from "@/data/projects";
 import { Reveal } from "@/components/fx/Reveal";
 import { ScrambleText } from "@/components/fx/ScrambleText";
@@ -39,12 +40,12 @@ export function Screen2Intro() {
       </Reveal>
 
       <div className="mt-9 flex flex-wrap items-center gap-3">
-        <a
+        <Link
           href="/start-a-project"
           className="rounded-sm bg-ink px-5 py-2.5 font-mono text-label uppercase text-graphite transition-opacity hover:opacity-85"
         >
           Start a Project
-        </a>
+        </Link>
         <a
           href="#projects"
           className="rounded-sm border border-line px-5 py-2.5 font-mono text-label uppercase text-ink-dim transition-colors hover:border-line-bright hover:text-ink"
@@ -59,7 +60,7 @@ export function Screen2Intro() {
       {/* The faceplate: four real systems, their category and current state. */}
       <div className="mt-16 border-t border-line">
         {featured.map((p) => (
-          <a
+          <Link
             key={p.slug}
             href={`/projects/${p.slug}`}
             className="group grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-line py-4 outline-none transition-colors hover:bg-panel/60 sm:grid-cols-[auto_10rem_1fr_auto] sm:gap-6"
@@ -76,7 +77,7 @@ export function Screen2Intro() {
             <span className="justify-self-end font-mono text-label uppercase text-ink-faint">
               {STATUS_LABEL[p.status] ?? p.status}
             </span>
-          </a>
+          </Link>
         ))}
       </div>
     </section>

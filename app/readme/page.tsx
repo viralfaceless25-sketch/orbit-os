@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function ReadmePage() {
   const sections = [
     {
@@ -62,9 +63,9 @@ export default function ReadmePage() {
       body: (
         <p>
           Best way in is the{" "}
-          <a href="/start-a-project" className="underline">
+          <Link href="/start-a-project" className="underline">
             Start a Project
-          </a>{" "}
+          </Link>{" "}
           flow.
         </p>
       ),

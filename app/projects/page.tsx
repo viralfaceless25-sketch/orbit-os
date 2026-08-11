@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SystemMonitor } from "@/components/monitor/SystemMonitor";
 import {
   featuredProjects,
@@ -27,7 +28,7 @@ const STATUS_LABEL: Record<string, string> = {
 
 function Row({ project }: { project: Project }) {
   return (
-    <a
+    <Link
       href={`/projects/${project.slug}`}
       className="group grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-line py-5 outline-none transition-colors hover:bg-panel/50 sm:grid-cols-[auto_12rem_1fr_auto] sm:gap-6"
     >
@@ -41,7 +42,7 @@ function Row({ project }: { project: Project }) {
       <span className="justify-self-end font-mono text-label uppercase text-ink-faint">
         {STATUS_LABEL[project.status] ?? project.status}
       </span>
-    </a>
+    </Link>
   );
 }
 

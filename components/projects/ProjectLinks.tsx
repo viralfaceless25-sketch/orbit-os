@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Project } from "@/data/projects";
 
 export function ProjectLinks({ project }: { project: Project }) {
@@ -13,12 +14,12 @@ export function ProjectLinks({ project }: { project: Project }) {
           View GitHub
         </a>
       )}
-      <a
+      <Link
         href={`/start-a-project?interest=${encodeURIComponent(project.category)}`}
         className="rounded border border-white/20 px-4 py-2 text-sm"
       >
         Discuss a Similar Project
-      </a>
+      </Link>
     </div>
   );
 }
