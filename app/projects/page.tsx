@@ -1,4 +1,4 @@
-import { ProjectGalaxy } from "@/components/galaxy/ProjectGalaxy";
+import { SystemMonitor } from "@/components/monitor/SystemMonitor";
 import {
   featuredProjects,
   supportingProjects,
@@ -96,7 +96,7 @@ export default function ProjectsIndexPage() {
         </p>
       </header>
 
-      <ProjectGalaxy />
+      <SystemMonitor />
 
       <Group
         index="01"
