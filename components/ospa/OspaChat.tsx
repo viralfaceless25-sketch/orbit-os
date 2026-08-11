@@ -49,13 +49,45 @@ export function OspaChat() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: next }),
       });
-      const data = await res.json();
 
       if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
         setError(data.error ?? "OSPA could not answer that.");
         return;
       }
-      setTurns([...next, { role: "assistant", content: data.reply }]);
+
+      // JSON when a hosted provider answered in one shot; a plain text stream
+      // when the local model is producing tokens as it goes.
+      const isStream = !res.headers.get("Content-Type")?.includes("application/json");
+
+      if (!isStream) {
+        const data = await res.json();
+        setTurns([...next, { role: "assistant", content: data.reply }]);
+        return;
+      }
+
+      const reader = res.body?.getReader();
+      if (!reader) {
+        setError("OSPA returned nothing.");
+        return;
+      }
+
+      const decoder = new TextDecoder();
+      let assembled = "";
+      setTurns([...next, { role: "assistant", content: "" }]);
+
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        assembled += decoder.decode(value, { stream: true });
+        // Replace the trailing assistant turn as it grows.
+        setTurns([...next, { role: "assistant", content: assembled }]);
+      }
+
+      if (!assembled.trim()) {
+        setTurns(next);
+        setError("OSPA had nothing to say. Try rephrasing.");
+      }
     } catch {
       setError("Could not reach OSPA. Check your connection.");
     } finally {

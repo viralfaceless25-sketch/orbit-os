@@ -245,17 +245,6 @@ export const projects: Project[] = [
     screenshots: [],
   },
   {
-    slug: "mega-ice-prototype",
-    title: "Mega Ice (prototype)",
-    category: "web",
-    tier: "archive",
-    oneLiner: "First pass at the ice delivery site, superseded by the current build.",
-    status: "archived",
-    techStack: ["JavaScript"],
-    githubUrl: `${GH}/Mega-ice`,
-    screenshots: [],
-  },
-  {
     slug: "ai-agent-memory",
     title: "Agent Memory",
     category: "ai",

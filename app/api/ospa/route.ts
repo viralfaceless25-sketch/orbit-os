@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { MAX_MESSAGE_CHARS, MAX_HISTORY_TURNS } from "@/lib/ospa-knowledge";
 import {
-  OSPA_SYSTEM_PROMPT,
-  MAX_MESSAGE_CHARS,
-  MAX_HISTORY_TURNS,
-} from "@/lib/ospa-knowledge";
+  askOspa,
+  streamOllama,
+  activeProvider,
+  ProviderError,
+  type Turn,
+} from "@/lib/ospa-provider";
 
 /*
-  Public chat endpoint. Anyone on the internet can reach this, and every call
-  spends the site owner's API budget, so the limits below are the point of the
-  file, not an afterthought:
+  Public chat endpoint. Anyone on the internet can reach this, so the limits
+  below are the point of the file, not an afterthought:
 
-    - short replies (max_tokens) and low effort keep per-call cost small
     - history is truncated server-side so a client cannot grow the prompt
+    - message length is capped
     - a per-IP window caps how often one visitor can call it
 
   The rate limiter is in-process. On serverless it resets whenever the instance
@@ -51,11 +52,6 @@ function rateLimit(key: string): { ok: boolean; retryAfter: number } {
   return { ok: true, retryAfter: 0 };
 }
 
-interface ChatTurn {
-  role: "user" | "assistant";
-  content: string;
-}
-
 export async function POST(req: NextRequest) {
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -70,17 +66,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (activeProvider() === "off") {
     return NextResponse.json(
-      {
-        error:
-          "OSPA is not connected yet. Use the Start a Project page to reach Keyush directly.",
-      },
+      { error: "OSPA is switched off. Use the Start a Project page to reach Keyush." },
       { status: 503 }
     );
   }
 
-  let body: { messages?: ChatTurn[] };
+  let body: { messages?: Turn[] };
   try {
     body = await req.json();
   } catch {
@@ -88,12 +81,14 @@ export async function POST(req: NextRequest) {
   }
 
   const history = Array.isArray(body.messages) ? body.messages : [];
-  if (history.length === 0) {
-    return NextResponse.json({ error: "No message provided." }, { status: 400 });
-  }
-
   const latest = history[history.length - 1];
-  if (latest.role !== "user" || typeof latest.content !== "string" || !latest.content.trim()) {
+
+  if (
+    !latest ||
+    latest.role !== "user" ||
+    typeof latest.content !== "string" ||
+    !latest.content.trim()
+  ) {
     return NextResponse.json({ error: "No message provided." }, { status: 400 });
   }
   if (latest.content.length > MAX_MESSAGE_CHARS) {
@@ -104,58 +99,35 @@ export async function POST(req: NextRequest) {
   }
 
   // Trust only the shape, never the length: rebuild the transcript ourselves.
-  const trimmed = history.slice(-MAX_HISTORY_TURNS).map((turn) => ({
-    role: turn.role === "assistant" ? ("assistant" as const) : ("user" as const),
+  const trimmed: Turn[] = history.slice(-MAX_HISTORY_TURNS).map((turn) => ({
+    role: turn.role === "assistant" ? "assistant" : "user",
     content: String(turn.content).slice(0, MAX_MESSAGE_CHARS),
   }));
 
-  const client = new Anthropic();
-
   try {
-    const response = await client.messages.create({
-      model: "claude-opus-5",
-      max_tokens: 2048,
-      system: [
-        {
-          type: "text",
-          text: OSPA_SYSTEM_PROMPT,
-          // The prompt is identical on every call, so cache it.
-          cache_control: { type: "ephemeral" },
+    // The local model answers slowly enough that waiting for the full reply
+    // reads as a hang. Stream it so text appears as it is produced.
+    if (activeProvider() === "ollama") {
+      const stream = await streamOllama(trimmed);
+      return new Response(stream, {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+          "Cache-Control": "no-store",
+          "X-Accel-Buffering": "no",
         },
-      ],
-      output_config: { effort: "low" },
-      messages: trimmed,
-    });
-
-    if (response.stop_reason === "refusal") {
-      return NextResponse.json({
-        reply: "I can't help with that one. Ask me about Keyush's work instead.",
       });
     }
 
-    const reply = response.content
-      .filter((block): block is Anthropic.TextBlock => block.type === "text")
-      .map((block) => block.text)
-      .join("")
-      .trim();
-
+    const reply = await askOspa(trimmed);
     if (!reply) {
       return NextResponse.json({
         reply: "I don't have an answer for that. Try the Start a Project page.",
       });
     }
-
     return NextResponse.json({ reply });
   } catch (err) {
-    if (err instanceof Anthropic.RateLimitError) {
-      return NextResponse.json(
-        { error: "OSPA is busy right now. Try again shortly." },
-        { status: 429 }
-      );
-    }
-    if (err instanceof Anthropic.AuthenticationError) {
-      console.error("OSPA: invalid ANTHROPIC_API_KEY");
-      return NextResponse.json({ error: "OSPA is unavailable." }, { status: 503 });
+    if (err instanceof ProviderError) {
+      return NextResponse.json({ error: err.message }, { status: err.status });
     }
     console.error("OSPA request failed:", err);
     return NextResponse.json({ error: "OSPA could not answer that." }, { status: 502 });
