@@ -19,6 +19,9 @@ export function OspaChat() {
   const [draft, setDraft] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Set when the server answered from the project registry because the model
+  // was unreachable. Worth saying out loud rather than passing off as normal.
+  const [degraded, setDegraded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -62,9 +65,11 @@ export function OspaChat() {
 
       if (!isStream) {
         const data = await res.json();
+        setDegraded(Boolean(data.degraded));
         setTurns([...next, { role: "assistant", content: data.reply }]);
         return;
       }
+      setDegraded(false);
 
       const reader = res.body?.getReader();
       if (!reader) {
@@ -157,6 +162,11 @@ export function OspaChat() {
 
             {pending && (
               <p className="font-mono text-label uppercase text-ink-faint">Thinking…</p>
+            )}
+            {degraded && (
+              <p className="font-mono text-label uppercase text-ink-faint">
+                Model unreachable · reading from the project registry
+              </p>
             )}
             {error && <p className="text-sm text-accent-exp">{error}</p>}
           </div>

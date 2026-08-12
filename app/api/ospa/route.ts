@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { MAX_MESSAGE_CHARS, MAX_HISTORY_TURNS } from "@/lib/ospa-knowledge";
 import {
   askOspa,
-  streamOllama,
+  streamOspa,
+  providerStreams,
   activeProvider,
   ProviderError,
   type Turn,
 } from "@/lib/ospa-provider";
+import { answerFromRegistry } from "@/lib/ospa-fallback";
 
 /*
   Public chat endpoint. Anyone on the internet can reach this, so the limits
@@ -105,10 +107,10 @@ export async function POST(req: NextRequest) {
   }));
 
   try {
-    // The local model answers slowly enough that waiting for the full reply
-    // reads as a hang. Stream it so text appears as it is produced.
-    if (activeProvider() === "ollama") {
-      const stream = await streamOllama(trimmed);
+    // A model answers slowly enough that waiting for the full reply reads as a
+    // hang. Stream it so text appears as it is produced.
+    if (providerStreams()) {
+      const stream = await streamOspa(trimmed);
       return new Response(stream, {
         headers: {
           "Content-Type": "text/plain; charset=utf-8",
@@ -126,10 +128,22 @@ export async function POST(req: NextRequest) {
     }
     return NextResponse.json({ reply });
   } catch (err) {
+    /*
+      A backend being unreachable, throttled, or misconfigured must not take
+      the assistant down. The registry is always available, so answer from it
+      and let the visitor carry on — an unhelpful answer beats an error on the
+      one page whose job is to get someone to make contact.
+
+      A 400-class error is the caller's fault and is still reported as one.
+    */
+    if (err instanceof ProviderError && err.status >= 500) {
+      console.error(`OSPA provider unavailable (${err.status}): ${err.message}`);
+      return NextResponse.json({ reply: answerFromRegistry(latest.content), degraded: true });
+    }
     if (err instanceof ProviderError) {
       return NextResponse.json({ error: err.message }, { status: err.status });
     }
     console.error("OSPA request failed:", err);
-    return NextResponse.json({ error: "OSPA could not answer that." }, { status: 502 });
+    return NextResponse.json({ reply: answerFromRegistry(latest.content), degraded: true });
   }
 }
