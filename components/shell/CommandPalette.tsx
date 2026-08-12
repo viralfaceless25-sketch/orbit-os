@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { filterCommands, paletteCommands } from "@/lib/palette-commands";
 
@@ -36,17 +37,31 @@ export function CommandPalette({ onClose }: { onClose: () => void }) {
 
         {results.length > 0 ? (
           <ul className="max-h-80 overflow-y-auto py-1.5">
-            {results.map((cmd) => (
-              <li key={cmd.id}>
-                <a
-                  href={cmd.href}
-                  className="flex items-center gap-3 px-4 py-2 text-sm text-ink-dim outline-none transition-colors hover:bg-panel-raised hover:text-ink focus-visible:bg-panel-raised focus-visible:text-ink"
-                >
-                  <span aria-hidden className="h-px w-3 bg-line-bright" />
-                  {cmd.label}
-                </a>
-              </li>
-            ))}
+            {results.map((cmd) => {
+              const external = cmd.href.startsWith("http");
+              const className =
+                "flex items-center gap-3 px-4 py-3 text-sm text-ink-dim outline-none transition-colors hover:bg-panel-raised hover:text-ink focus-visible:bg-panel-raised focus-visible:text-ink sm:py-2";
+              return (
+                <li key={cmd.id}>
+                  {external ? (
+                    <a
+                      href={cmd.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={className}
+                    >
+                      <span aria-hidden className="h-px w-3 bg-line-bright" />
+                      {cmd.label}
+                    </a>
+                  ) : (
+                    <Link href={cmd.href} onClick={onClose} className={className}>
+                      <span aria-hidden className="h-px w-3 bg-line-bright" />
+                      {cmd.label}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p className="px-4 py-6 font-mono text-label uppercase text-ink-faint">

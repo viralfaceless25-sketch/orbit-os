@@ -41,7 +41,7 @@ export function Screen4Selector() {
   return (
     <Section index="02" eyebrow="Start here" title="What are you trying to build?">
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-2 sm:gap-4">
         {MODULES.map((m) => {
           const isActive = selected === m.label;
           return (
@@ -49,14 +49,16 @@ export function Screen4Selector() {
               key={m.label}
               onClick={() => setSelected(isActive ? null : m.label)}
               aria-pressed={isActive}
-              className={`hud border p-6 text-left outline-none backdrop-blur-sm transition-colors ${
+              className={`hud border p-3 text-left outline-none backdrop-blur-sm transition-colors sm:p-6 ${
                 isActive
                   ? "border-line-bright bg-panel/80"
                   : "border-line bg-graphite/60 hover:border-line-bright hover:bg-panel/60"
               }`}
             >
-              <p className="font-display text-lg font-medium">{m.label}</p>
-              <p className="mt-2 text-sm leading-relaxed text-ink-dim">{m.description}</p>
+              <p className="font-display text-base font-medium sm:text-lg">{m.label}</p>
+              <p className="mt-1.5 text-xs leading-relaxed text-ink-dim sm:mt-2 sm:text-sm">
+                {m.description}
+              </p>
             </button>
           );
         })}
@@ -74,7 +76,7 @@ export function Screen4Selector() {
                   <li key={p.slug}>
                     <Link
                       href={`/projects/${p.slug}`}
-                      className="group flex items-baseline gap-3 outline-none"
+                      className="group flex flex-col outline-none sm:flex-row sm:items-baseline sm:gap-3"
                     >
                       <span className="font-display font-medium transition-colors group-hover:text-ink">
                         {p.title}

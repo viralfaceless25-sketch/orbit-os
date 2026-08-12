@@ -67,7 +67,7 @@ export function InquiryFlow({
     "w-full border border-line bg-transparent px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-faint focus:border-line-bright";
 
   return (
-    <div className="max-w-xl py-16">
+    <div className="max-w-xl py-10 sm:py-16">
       <p className="font-mono text-label uppercase text-ink-faint">Start a project</p>
       <h1 className="mt-4 font-display text-display-sm font-medium">
         Tell me what you are building.
@@ -77,27 +77,34 @@ export function InquiryFlow({
       </p>
 
       {state.step !== "review" && (
-        <ol className="mt-10 flex gap-1.5" aria-label="Progress">
-          {STEPS.map((s, i) => (
-            <li key={s.id} className="flex-1">
-              <span
-                className={`block h-px transition-colors ${
-                  i <= currentIndex ? "bg-ink" : "bg-line"
-                }`}
-              />
-              <span
-                className={`mt-2 block font-mono text-label uppercase ${
-                  i === currentIndex ? "text-ink" : "text-ink-faint"
-                }`}
-              >
-                {s.label}
-              </span>
-            </li>
-          ))}
-        </ol>
+        <>
+          <ol className="mt-8 flex gap-1.5 sm:mt-10" aria-label="Progress">
+            {STEPS.map((s, i) => (
+              <li key={s.id} className="flex-1">
+                <span
+                  className={`block h-px transition-colors ${
+                    i <= currentIndex ? "bg-ink" : "bg-line"
+                  }`}
+                />
+                {/* Five tracked labels do not fit across a phone, so below sm
+                    the bars carry position and a single line names the step. */}
+                <span
+                  className={`mt-2 hidden font-mono text-label uppercase sm:block ${
+                    i === currentIndex ? "text-ink" : "text-ink-faint"
+                  }`}
+                >
+                  {s.label}
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-3 font-mono text-label uppercase text-ink-dim sm:hidden">
+            Step {currentIndex + 1}/{STEPS.length} · {STEPS[currentIndex]?.label}
+          </p>
+        </>
       )}
 
-      <div className="mt-10 space-y-3">
+      <div className="mt-8 space-y-3 sm:mt-10">
         {state.step === "interest" && (
           <>
             <p className="mb-4 text-base">What are you interested in?</p>

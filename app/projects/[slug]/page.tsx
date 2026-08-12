@@ -28,7 +28,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
   if (!project) notFound();
 
   return (
-    <article className="max-w-3xl space-y-10 py-16">
+    <article className="max-w-3xl space-y-8 py-10 sm:space-y-10 sm:py-16">
       <header>
         <p className="font-mono text-label uppercase text-ink-faint">
           {project.category.replace("-", " ")} &middot;{" "}
@@ -37,7 +37,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
         <h1 className="mt-3 font-display text-display-sm font-medium md:text-display-md">
           {project.title}
         </h1>
-        <p className="mt-4 text-lg text-ink-dim">{project.oneLiner}</p>
+        <p className="mt-4 text-base text-ink-dim sm:text-lg">{project.oneLiner}</p>
       </header>
 
       {/* Live sites render as a real, scrollable embed rather than a screenshot. */}

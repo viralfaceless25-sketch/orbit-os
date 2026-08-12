@@ -10,14 +10,14 @@ const SPEC = [
 
 export function Screen3Profile() {
   return (
-    <Reveal className="grid gap-10 border-t border-line py-20 md:grid-cols-[1fr_1.2fr] md:gap-16">
+    <Reveal className="grid gap-8 border-t border-line py-14 sm:gap-10 sm:py-20 md:grid-cols-[1fr_1.2fr] md:gap-16">
       <div>
         <p className="font-mono text-label uppercase text-ink-faint">Builder profile</p>
         <dl className="mt-6 space-y-0">
           {SPEC.map(([label, value]) => (
             <div
               key={label}
-              className="grid grid-cols-[9rem_1fr] items-baseline gap-4 border-b border-line py-3"
+              className="grid grid-cols-[7rem_1fr] items-baseline gap-3 border-b border-line py-3 sm:grid-cols-[9rem_1fr] sm:gap-4"
             >
               <dt className="font-mono text-label uppercase text-ink-faint">{label}</dt>
               <dd className="text-sm text-ink">{value}</dd>

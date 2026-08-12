@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
@@ -40,7 +41,7 @@ export function SideDock() {
       className="fixed left-0 top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-px pl-5 lg:flex"
     >
       {ITEMS.map((item, i) => (
-        <a
+        <Link
           key={item.label}
           href={item.href}
           className="group flex items-center gap-3 py-2 outline-none"
@@ -64,7 +65,7 @@ export function SideDock() {
               {item.label}
             </span>
           </span>
-        </a>
+        </Link>
       ))}
     </nav>
   );

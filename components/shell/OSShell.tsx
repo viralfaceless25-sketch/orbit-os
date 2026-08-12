@@ -40,7 +40,7 @@ export function OSShell({ children }: { children: React.ReactNode }) {
       <SideDock />
 
       {/* Single content spine. Every section aligns to this, nothing wanders */}
-      <main className="mx-auto w-full max-w-6xl px-6 pb-32 lg:px-16">{children}</main>
+      <main className="mx-auto w-full max-w-6xl px-4 pb-32 sm:px-6 lg:px-16">{children}</main>
 
       <SystemStatus />
 

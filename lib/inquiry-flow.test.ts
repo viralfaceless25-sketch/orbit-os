@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { initialInquiryState, isStepComplete, nextStep, categoryToInterestLabel } from "./inquiry-flow";
+import type { InquiryState } from "./inquiry-flow";
 
 describe("inquiry flow state machine", () => {
   it("starts on the interest step, incomplete", () => {
@@ -13,7 +14,7 @@ describe("inquiry flow state machine", () => {
   });
 
   it("advances through each step once its field is filled", () => {
-    let state = { ...initialInquiryState, interest: "Website" };
+    let state: InquiryState = { ...initialInquiryState, interest: "Website" };
     state = nextStep(state);
     expect(state.step).toBe("stage");
 

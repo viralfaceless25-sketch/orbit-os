@@ -30,7 +30,7 @@ export function Section({
   return (
     <section
       id={id}
-      className="grid scroll-mt-24 gap-10 border-t border-line py-24 lg:grid-cols-[15rem_1fr] lg:gap-16"
+      className="grid scroll-mt-24 gap-6 border-t border-line py-14 sm:gap-10 sm:py-24 lg:grid-cols-[15rem_1fr] lg:gap-16"
     >
       <div className="lg:sticky lg:top-32 lg:self-start">
         <Reveal>

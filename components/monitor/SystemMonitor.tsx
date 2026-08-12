@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { projects, type Project, type ProjectCategory } from "@/data/projects";
 import { matchesQuery } from "@/lib/project-search";
@@ -72,6 +73,7 @@ function Bar({ value, live }: { value: number; live: number }) {
 }
 
 export function SystemMonitor() {
+  const router = useRouter();
   const reduced = usePrefersReducedMotion();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<ProjectCategory | "all">("all");
@@ -113,12 +115,12 @@ export function SystemMonitor() {
         e.preventDefault();
         setSelected((s) => Math.max(s - 1, 0));
       } else if (e.key === "Enter" && rows[selected]) {
-        window.location.href = `/projects/${rows[selected].slug}`;
+        router.push(`/projects/${rows[selected].slug}`);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [rows, selected]);
+  }, [rows, selected, router]);
 
   const clock = `${String(Math.floor(uptime / 3600)).padStart(2, "0")}:${String(
     Math.floor((uptime % 3600) / 60)
@@ -134,7 +136,7 @@ export function SystemMonitor() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="filter by name, problem, or technology"
           aria-label="Filter processes"
-          className="min-w-[15rem] flex-1 border border-line bg-transparent px-4 py-2.5 font-mono text-data text-ink outline-none transition-colors placeholder:text-ink-faint focus:border-line-bright"
+          className="w-full flex-1 border border-line bg-transparent px-3 py-2.5 font-mono text-data text-ink outline-none transition-colors placeholder:text-ink-faint focus:border-line-bright sm:w-auto sm:min-w-[15rem] sm:px-4"
         />
         {CATEGORIES.map((c) => (
           <button
@@ -195,7 +197,7 @@ export function SystemMonitor() {
                   <tr
                     key={p.slug}
                     onMouseEnter={() => setSelected(i)}
-                    onClick={() => (window.location.href = `/projects/${p.slug}`)}
+                    onClick={() => router.push(`/projects/${p.slug}`)}
                     className={`cursor-pointer border-b border-line/60 transition-colors last:border-b-0 ${
                       isActive ? "bg-panel" : "hover:bg-panel/60"
                     }`}

@@ -60,7 +60,9 @@ export function Screen7Process() {
                 </span>
                 <span>
                   <span className="font-display text-lg font-medium">{stage.name}</span>
-                  <span className="ml-3 text-sm text-ink-dim">{stage.short}</span>
+                  <span className="mt-1 block text-sm text-ink-dim sm:ml-3 sm:mt-0 sm:inline">
+                    {stage.short}
+                  </span>
                 </span>
                 <span
                   aria-hidden

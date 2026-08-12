@@ -21,19 +21,19 @@ export function Screen2Intro() {
   const featured = projects.filter((p) => p.tier === "featured");
 
   return (
-    <section className="pt-20 pb-24 md:pt-28">
+    <section className="pb-16 pt-12 sm:pb-24 sm:pt-20 md:pt-28">
       <p className="tick font-mono text-label uppercase text-ink-faint">
         <ScrambleText text={`${featured.length} SYSTEMS ONLINE`} speed={34} delay={150} />
       </p>
 
       <Reveal delay={0.12}>
-        <h1 className="mt-7 max-w-4xl font-display text-display-md font-medium text-balance md:text-display-lg">
+        <h1 className="mt-5 max-w-4xl font-display text-display-sm font-medium text-balance sm:mt-7 sm:text-display-md md:text-display-lg">
           A living system of websites, AI products, experiments, and ideas.
         </h1>
       </Reveal>
 
       <Reveal delay={0.24}>
-        <p className="mt-7 max-w-xl text-ink-dim">
+        <p className="mt-5 max-w-xl text-sm text-ink-dim sm:mt-7 sm:text-base">
           Freelance developer and product builder helping businesses, startups, and creative
           people design, build, and launch technology.
         </p>
@@ -58,7 +58,7 @@ export function Screen2Intro() {
       </div>
 
       {/* The faceplate: four real systems, their category and current state. */}
-      <div className="mt-16 border-t border-line">
+      <div className="mt-10 border-t border-line sm:mt-16">
         {featured.map((p) => (
           <Link
             key={p.slug}

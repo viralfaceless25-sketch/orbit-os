@@ -38,7 +38,7 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
         <Link
           href="/"
           aria-label="ORBIT OS, Keyush Patel"
-          className="group relative col-start-2 block h-9 w-[11rem] overflow-hidden text-center outline-none xs:w-[13rem] sm:w-[16rem] md:w-[20rem]"
+          className="group relative col-start-2 block h-9 w-[11rem] overflow-hidden text-center outline-none xs:w-[13rem] sm:w-[16rem] lg:w-[20rem]"
         >
           {WORDMARKS.map((word, i) => {
             const active = i === index;
@@ -46,7 +46,7 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
               <span
                 key={word}
                 aria-hidden={!active}
-                className="absolute inset-0 flex items-center justify-center whitespace-nowrap font-display text-base font-medium tracking-[0.08em] xs:text-lg sm:text-2xl sm:tracking-[0.14em] md:text-3xl"
+                className="absolute inset-0 flex items-center justify-center whitespace-nowrap font-display text-base font-medium tracking-[0.08em] xs:text-lg sm:text-2xl sm:tracking-[0.14em] lg:text-3xl"
                 style={{
                   opacity: active ? 1 : 0,
                   transform: reduced

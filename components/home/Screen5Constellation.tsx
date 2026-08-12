@@ -17,6 +17,14 @@ const CATEGORY_LABEL: Record<string, string> = {
   "open-source": "Open source",
 };
 
+/* Two columns on a phone leave no room for "Product prototype" to fit unclipped. */
+const CATEGORY_LABEL_SHORT: Record<string, string> = {
+  ai: "AI system",
+  web: "Client work",
+  prototype: "Prototype",
+  "open-source": "Open source",
+};
+
 export function Screen5Constellation() {
   const featured = projects.filter((p) => p.tier === "featured");
 
@@ -28,31 +36,38 @@ export function Screen5Constellation() {
       title="What these systems solved"
     >
 
-      <RevealStagger className="grid gap-4 sm:grid-cols-2">
+      <RevealStagger className="grid grid-cols-2 gap-2 sm:gap-4">
         {featured.map((p) => (
           <Link
             key={p.slug}
             href={`/projects/${p.slug}`}
-            className="hud group flex h-full flex-col gap-4 border border-line bg-graphite/60 p-6 outline-none backdrop-blur-sm transition-colors hover:border-line-bright hover:bg-panel/80"
+            className="hud group flex h-full flex-col gap-2.5 border border-line bg-graphite/60 p-3 outline-none backdrop-blur-sm transition-colors hover:border-line-bright hover:bg-panel/80 sm:gap-4 sm:p-6"
           >
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <span
                 aria-hidden
-                className="led h-1.5 w-1.5 rounded-full"
+                className="led h-1.5 w-1.5 shrink-0 rounded-full"
                 style={{ backgroundColor: ACCENT[p.category], color: ACCENT[p.category] }}
               />
-              <span className="font-mono text-label uppercase text-ink-faint">
-                {CATEGORY_LABEL[p.category] ?? p.category}
+              <span className="truncate font-mono text-label uppercase text-ink-faint">
+                <span className="sm:hidden">
+                  {CATEGORY_LABEL_SHORT[p.category] ?? p.category}
+                </span>
+                <span className="hidden sm:inline">
+                  {CATEGORY_LABEL[p.category] ?? p.category}
+                </span>
               </span>
             </div>
 
-            <h3 className="font-display text-xl font-medium">{p.title}</h3>
+            <h3 className="font-display text-base font-medium sm:text-xl">{p.title}</h3>
 
             {/* The problem is what a client recognises. Lead with it, not the stack. */}
-            <p className="text-sm leading-relaxed text-ink-dim">{p.problem}</p>
+            <p className="line-clamp-3 text-xs leading-relaxed text-ink-dim sm:line-clamp-none sm:text-sm">
+              {p.problem}
+            </p>
 
             {p.outcome?.[0] && (
-              <div className="mt-auto flex items-baseline gap-3 pt-2">
+              <div className="mt-auto hidden items-baseline gap-3 pt-2 sm:flex">
                 <span className="shrink-0 font-mono text-label uppercase text-ink-faint">
                   Result
                 </span>
@@ -60,8 +75,10 @@ export function Screen5Constellation() {
               </div>
             )}
 
-            {/* Stack readout. The technical fingerprint of the system */}
-            <ul className="flex flex-wrap gap-x-3 gap-y-1 border-t border-line pt-4">
+            {/* Stack readout. The technical fingerprint of the system. Hidden below
+                sm — at two columns on a phone there is no room to show it and
+                still keep the problem statement readable. */}
+            <ul className="mt-auto hidden flex-wrap gap-x-3 gap-y-1 border-t border-line pt-4 sm:flex">
               {p.techStack.slice(0, 4).map((t) => (
                 <li key={t} className="font-mono text-label uppercase text-ink-faint">
                   {t}
@@ -75,7 +92,8 @@ export function Screen5Constellation() {
             </ul>
 
             <span className="font-mono text-label uppercase text-ink-dim transition-colors group-hover:text-ink">
-              Read the case →
+              <span className="sm:hidden">Read →</span>
+              <span className="hidden sm:inline">Read the case →</span>
             </span>
           </Link>
         ))}

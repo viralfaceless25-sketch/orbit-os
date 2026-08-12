@@ -59,7 +59,7 @@ function Group({
 }) {
   if (items.length === 0) return null;
   return (
-    <section className="grid gap-8 border-t border-line py-16 lg:grid-cols-[15rem_1fr] lg:gap-16">
+    <section className="grid gap-6 border-t border-line py-10 sm:gap-8 sm:py-16 lg:grid-cols-[15rem_1fr] lg:gap-16">
       <div className="lg:sticky lg:top-32 lg:self-start">
         <p className="flex items-baseline gap-3 font-mono text-label uppercase text-ink-faint">
           <span className="tabular-nums text-ink-dim">{index}</span>
@@ -83,7 +83,7 @@ export default function ProjectsIndexPage() {
   const total = featuredProjects.length + supportingProjects.length + archiveProjects.length;
 
   return (
-    <div className="py-16">
+    <div className="py-10 sm:py-16">
       <header className="max-w-2xl">
         <p className="font-mono text-label uppercase text-ink-faint">
           Index &middot; {total} projects
@@ -91,7 +91,7 @@ export default function ProjectsIndexPage() {
         <h1 className="mt-4 font-display text-display-sm font-medium md:text-display-md">
           Everything built so far.
         </h1>
-        <p className="mt-5 leading-relaxed text-ink-dim">
+        <p className="mt-5 text-sm leading-relaxed text-ink-dim sm:text-base">
           Grouped by how much of the story is written up. Not every repository is a case
           study, and pretending otherwise would waste your time.
         </p>

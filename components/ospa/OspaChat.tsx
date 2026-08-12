@@ -116,7 +116,7 @@ export function OspaChat() {
         <div
           role="dialog"
           aria-label="Chat with OSPA"
-          className="fixed bottom-20 right-5 z-50 flex h-[26rem] w-[min(22rem,calc(100vw-2.5rem))] flex-col border border-line bg-graphite/95 backdrop-blur-xl"
+          className="fixed bottom-20 right-5 z-50 flex h-[min(26rem,calc(100dvh-10rem))] w-[min(22rem,calc(100vw-2.5rem))] flex-col border border-line bg-graphite/95 backdrop-blur-xl"
         >
           <div className="flex items-center gap-2.5 border-b border-line px-4 py-3">
             <span aria-hidden className="led h-1.5 w-1.5 rounded-full bg-accent-ai text-accent-ai" />
