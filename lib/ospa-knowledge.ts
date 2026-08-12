@@ -5,20 +5,28 @@ import { capabilities } from "@/data/capabilities";
  * The assistant's knowledge is generated from the same registry that renders
  * the site, so it can never describe a project that isn't listed, and it stays
  * correct automatically when the registry changes.
+ *
+ * Detail is spent where it earns its place. The hosted free tier meters tokens
+ * per minute, and this prompt is re-sent on every single message, so the full
+ * problem/solution/outcome write-up is given only for featured work — the
+ * projects a visitor actually asks about. Everything else is listed with enough
+ * to be named, linked, and described in a sentence, which is all a shorter
+ * answer needs anyway. Sending the whole registry in full detail cost about
+ * 2,700 tokens a message and throttled the site after four of them.
  */
 function projectFacts(): string {
-  return projects
+  const detailed = projects
+    .filter((p) => p.tier === "featured")
     .map((p) => {
       const lines = [
-        `## ${p.title} (${p.tier}, ${p.category})`,
+        `## ${p.title} (${p.category})`,
         `Summary: ${p.oneLiner}`,
         `Status: ${p.status}`,
         `Stack: ${p.techStack.join(", ")}`,
       ];
       if (p.role) lines.push(`Role: ${p.role}`);
       if (p.problem) lines.push(`Problem: ${p.problem}`);
-      if (p.solution) lines.push(`Solution: ${p.solution}`);
-      if (p.outcome?.length) lines.push(`Outcome: ${p.outcome.join(" ")}`);
+      if (p.outcome?.[0]) lines.push(`Outcome: ${p.outcome[0]}`);
       if (p.liveUrl) lines.push(`Live: ${p.liveUrl}`);
       if (p.githubUrl) lines.push(`Source: ${p.githubUrl}`);
       // Stated as the only valid link for this project. A model that guesses a
@@ -27,6 +35,18 @@ function projectFacts(): string {
       return lines.join("\n");
     })
     .join("\n\n");
+
+  const brief = projects
+    .filter((p) => p.tier !== "featured")
+    .map((p) => {
+      const where = [p.liveUrl, p.githubUrl].filter(Boolean).join(" ");
+      return `- ${p.title} (${p.category}, ${p.status}): ${p.oneLiner} Stack: ${p.techStack
+        .slice(0, 5)
+        .join(", ")}. Link: /projects/${p.slug}${where ? ` ${where}` : ""}`;
+    })
+    .join("\n");
+
+  return `${detailed}\n\n## Other projects\nThese are real and shipped, with shorter write-ups. Name and link them the same way.\n${brief}`;
 }
 
 function capabilityFacts(): string {
@@ -108,5 +128,12 @@ count, and include the links you were given.`;
 /** Max characters accepted for a single visitor message. */
 export const MAX_MESSAGE_CHARS = 800;
 
-/** Max turns kept from the client, to bound prompt growth and cost. */
-export const MAX_HISTORY_TURNS = 10;
+/*
+  Max turns kept from the client, to bound prompt growth and cost.
+
+  Six rather than ten: every turn is re-sent with every message, and the hosted
+  free tier meters tokens per minute. Three exchanges is plenty of context for
+  the kind of question this assistant gets, and the tokens saved are spent
+  answering someone instead of re-reading the start of the conversation.
+*/
+export const MAX_HISTORY_TURNS = 6;

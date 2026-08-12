@@ -134,9 +134,15 @@ export async function POST(req: NextRequest) {
       and let the visitor carry on — an unhelpful answer beats an error on the
       one page whose job is to get someone to make contact.
 
-      A 400-class error is the caller's fault and is still reported as one.
+      429 is included deliberately. The hosted free tier meters tokens per
+      minute and this prompt is large, so a single engaged visitor can hit the
+      ceiling in a few questions. Being throttled is the expected steady state,
+      not an exception, and it must read as a quieter assistant rather than a
+      broken one.
+
+      A 400-class error is the caller's own fault and is still reported as one.
     */
-    if (err instanceof ProviderError && err.status >= 500) {
+    if (err instanceof ProviderError && (err.status >= 500 || err.status === 429)) {
       console.error(`OSPA provider unavailable (${err.status}): ${err.message}`);
       return NextResponse.json({ reply: answerFromRegistry(latest.content), degraded: true });
     }
