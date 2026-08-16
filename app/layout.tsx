@@ -27,9 +27,27 @@ const mono = IBM_Plex_Mono({
   display: "swap",
 });
 
+const SITE_URL = "https://orbit-os-mocha.vercel.app";
+const DESCRIPTION = "A living system of websites, AI products, experiments, and ideas.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "ORBIT OS · Keyush Patel",
-  description: "A living system of websites, AI products, experiments, and ideas.",
+  description: DESCRIPTION,
+  openGraph: {
+    type: "website",
+    siteName: "ORBIT OS",
+    title: "ORBIT OS · Keyush Patel",
+    description: DESCRIPTION,
+    url: SITE_URL,
+    images: [{ url: "/og/default.jpg", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ORBIT OS · Keyush Patel",
+    description: DESCRIPTION,
+    images: ["/og/default.jpg"],
+  },
 };
 
 export default function RootLayout({

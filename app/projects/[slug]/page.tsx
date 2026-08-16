@@ -5,6 +5,37 @@ import { ProjectPreview } from "@/components/projects/ProjectPreview";
 import { SiriDemo } from "@/components/projects/SiriDemo";
 import { SiriShots } from "@/components/projects/SiriShots";
 
+/*
+  Per-project share cards. Each project has its own generated image, so a link
+  pasted into a chat or a feed arrives with the project's own name on it rather
+  than a blank rectangle or the same site-wide card every time.
+*/
+export function generateMetadata({ params }: { params: { slug: string } }) {
+  const project = projects.find((p) => p.slug === params.slug);
+  if (!project) return {};
+
+  const title = `${project.title} · ORBIT OS`;
+  const image = `/og/${project.slug}.jpg`;
+
+  return {
+    title,
+    description: project.oneLiner,
+    openGraph: {
+      type: "article",
+      title,
+      description: project.oneLiner,
+      url: `/projects/${project.slug}`,
+      images: [{ url: image, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: project.oneLiner,
+      images: [image],
+    },
+  };
+}
+
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
