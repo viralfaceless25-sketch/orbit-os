@@ -67,7 +67,10 @@ export const projects: Project[] = [
       "The fast path answers common system questions in under a second without calling a model at all.",
       "Its own offline smoke test covers routing, safety classification, session memory, and speech shaping, and passes clean.",
     ],
-    screenshots: [],
+    screenshots: [
+      "/projects/siri-mac-agent/action-button.webp",
+      "/projects/siri-mac-agent/now-listening.webp",
+    ],
   },
 
   {
