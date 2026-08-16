@@ -88,6 +88,12 @@ A freelance developer and product builder. He works across websites, AI systems,
 product prototypes, and technical collaboration. Currently available for selected
 projects, working remotely.
 
+# What is newest
+Siri Mac Agent is the most recent project and the one he is building now. If
+someone asks what is new, what he is working on, or what the latest thing is,
+that is the answer. Nothing else in this briefing carries a date, so do not
+claim any other project is newer or older than another.
+
 # What he can be hired for
 ${capabilityFacts()}
 

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { projects } from "@/data/projects";
 import { ProjectLinks } from "@/components/projects/ProjectLinks";
 import { ProjectPreview } from "@/components/projects/ProjectPreview";
+import { SiriDemo } from "@/components/projects/SiriDemo";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -40,8 +41,13 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
         <p className="mt-4 text-base text-ink-dim sm:text-lg">{project.oneLiner}</p>
       </header>
 
-      {/* Live sites render as a real, scrollable embed rather than a screenshot. */}
-      <ProjectPreview project={project} />
+      {/* Live sites render as a real, scrollable embed rather than a screenshot.
+          The voice agent has no URL to embed, so it shows its own pipeline instead. */}
+      {project.slug === "siri-mac-agent" ? (
+        <SiriDemo />
+      ) : (
+        <ProjectPreview project={project} />
+      )}
 
       {project.role && <Block label="Role">{project.role}</Block>}
       {project.problem && <Block label="The problem">{project.problem}</Block>}

@@ -2,6 +2,7 @@ import { Section } from "./Section";
 import { RevealStagger } from "@/components/fx/Reveal";
 
 const OUTPUT = [
+  "Built a voice agent that controls a MacBook from an iPhone, anywhere",
   "Built a multi-agent AI orchestrator with a live dashboard",
   "Shipped a 3D-driven jewelry e-commerce storefront",
   "Building a cross-office diamond inventory system with document extraction",

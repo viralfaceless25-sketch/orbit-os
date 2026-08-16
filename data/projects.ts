@@ -33,6 +33,44 @@ const GH = "https://github.com/viralfaceless25-sketch";
 export const projects: Project[] = [
   /* ---------------------------------------------------------------- featured */
   {
+    slug: "siri-mac-agent",
+    title: "Siri Mac Agent",
+    category: "ai",
+    tier: "featured",
+    oneLiner:
+      "Control your MacBook by voice from your iPhone, from anywhere, including a live Claude Code session.",
+    status: "in-development",
+    role: "Sole builder. Architecture, routing, safety model, and the macOS tool layer.",
+    problem:
+      "Siri cannot be made smarter. Apple only lets a third party do three things: launch a Shortcut by name, hand over dictated text, and speak a reply. That is the entire surface area, so every attempt to make Siri genuinely useful runs out of room immediately.",
+    contribution:
+      "Treated Siri as a voice pipe rather than a brain, and put all of the intelligence on the Mac. Built the daemon, the router that decides where each utterance goes, the tiered macOS tool layer, and the safety model that makes remote voice control of a whole machine defensible.",
+    solution:
+      "An iPhone Shortcut sends the dictated phrase over Tailscale to a daemon on the Mac. A router sends it one of three ways: a pattern-matched fast path that answers questions like battery level from a single CLI call with no model at all, an Operator agent that drives macOS through tools, or a live Claude Code session running inside tmux. The Mac does the work and speaks the answer back.",
+    techStack: [
+      "Python",
+      "FastAPI",
+      "Claude Agent SDK",
+      "tmux",
+      "AppleScript",
+      "Tailscale",
+      "launchd",
+      "iOS Shortcuts",
+    ],
+    challenges: [
+      "Driving the Mac through the command line instead of clicking the interface. The agent works down four tiers and stops at the first that can do the job, so most requests resolve to something instant and deterministic that cannot misclick.",
+      "Typing into Claude Code through tmux rather than simulating keystrokes, so a prompt lands in the real process stdin instead of whichever window happened to have focus.",
+      "Making remote voice control of an entire machine safe: commands are classified safe, sensitive, or blocked, and the blocked set has no override path precisely because any override would itself be reachable by voice.",
+    ],
+    outcome: [
+      "Working end to end: voice from an iPhone on cellular opens apps, toggles system settings, finds files by name anywhere on disk, and hands coding tasks to a live Claude Code session.",
+      "The fast path answers common system questions in under a second without calling a model at all.",
+      "Its own offline smoke test covers routing, safety classification, session memory, and speech shaping, and passes clean.",
+    ],
+    screenshots: [],
+  },
+
+  {
     slug: "ams",
     title: "AMS",
     category: "ai",
