@@ -38,19 +38,20 @@ export const projects: Project[] = [
     category: "ai",
     tier: "featured",
     oneLiner:
-      "Control your MacBook by voice from your iPhone, from anywhere, including a live Claude Code session.",
+      "Control your MacBook by voice from your iPhone, from anywhere \u2014 including writing and running software by voice.",
     status: "in-development",
-    role: "Sole builder. Architecture, routing, safety model, and the macOS tool layer.",
+    role: "Sole builder. Architecture, routing, transcription, safety model, and the macOS tool layer.",
     problem:
       "Siri cannot be made smarter. Apple only lets a third party do three things: launch a Shortcut by name, hand over dictated text, and speak a reply. That is the entire surface area, so every attempt to make Siri genuinely useful runs out of room immediately.",
     contribution:
-      "Treated Siri as a voice pipe rather than a brain, and put all of the intelligence on the Mac. Built the daemon, the router that decides where each utterance goes, the tiered macOS tool layer, and the safety model that makes remote voice control of a whole machine defensible.",
+      "Treated Siri as a voice pipe rather than a brain, and put all of the intelligence on the Mac. Built the daemon, the router that decides where each utterance goes, the tiered macOS tool layer, the on-device transcription, and the safety model that makes remote voice control of a whole machine defensible.",
     solution:
-      "An iPhone Shortcut sends the dictated phrase over Tailscale to a daemon on the Mac. A router sends it one of three ways: a pattern-matched fast path that answers questions like battery level from a single CLI call with no model at all, an Operator agent that drives macOS through tools, or a live Claude Code session running inside tmux. The Mac does the work and speaks the answer back.",
+      "An iPhone Shortcut sends the recording over Tailscale to a daemon on the Mac. A router sends it one of four ways: a pattern-matched fast path that answers questions like battery level from a single CLI call with no model at all, an Operator agent that drives macOS through tools, a live Claude Code session running inside tmux, or the Builder, which writes and runs real software in a project directory. The Mac does the work and speaks the answer back.",
     techStack: [
       "Python",
       "FastAPI",
       "Claude Agent SDK",
+      "whisper.cpp",
       "tmux",
       "AppleScript",
       "Tailscale",
@@ -58,14 +59,16 @@ export const projects: Project[] = [
       "iOS Shortcuts",
     ],
     challenges: [
+      "Apple's dictation runs on the phone, has never heard of anything on this Mac, and hands over a finished guess with no confidence attached \u2014 the audit log filled up with \u201ccloth terminal\u201d for \u201cClaude terminal\u201d. Moving transcription onto the Mac removed the cause rather than repairing the symptom: the Shortcut sends audio, whisper.cpp transcribes it locally on the GPU, and it can be told the vocabulary before it decides. Audio never leaves the machine and there is no API cost.",
       "Driving the Mac through the command line instead of clicking the interface. The agent works down four tiers and stops at the first that can do the job, so most requests resolve to something instant and deterministic that cannot misclick.",
-      "Typing into Claude Code through tmux rather than simulating keystrokes, so a prompt lands in the real process stdin instead of whichever window happened to have focus.",
       "Making remote voice control of an entire machine safe: commands are classified safe, sensitive, or blocked, and the blocked set has no override path precisely because any override would itself be reachable by voice.",
+      "A phone is a terrible progress display, and iOS abandons a Shortcut at about sixty seconds. Anything substantial runs detached and announces itself with a notification when the work lands.",
     ],
     outcome: [
-      "Working end to end: voice from an iPhone on cellular opens apps, toggles system settings, finds files by name anywhere on disk, and hands coding tasks to a live Claude Code session.",
+      "Working end to end: voice from an iPhone on cellular opens apps, toggles system settings, finds files by name anywhere on disk, reads the screen, and hands coding tasks to a live Claude Code session.",
+      "The Builder writes software by voice \u2014 Claude Code's real toolset pointed at a project directory, with no trigger phrase, because the Operator recognises a coding request on its own.",
       "The fast path answers common system questions in under a second without calling a model at all.",
-      "Its own offline smoke test covers routing, safety classification, session memory, and speech shaping, and passes clean.",
+      "Two offline test suites cover routing, safety classification, transcript repair, session memory, and speech shaping. Both pass clean.",
     ],
     screenshots: [
       "/projects/siri-mac-agent/action-button.webp",

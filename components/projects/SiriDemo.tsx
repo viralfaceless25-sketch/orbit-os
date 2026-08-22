@@ -13,7 +13,7 @@ import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
   implies a socket it does not have is worse than no demo.
 */
 
-type Route = "FAST" | "OPERATOR" | "CLAUDE" | "BLOCKED";
+type Route = "FAST" | "OPERATOR" | "CLAUDE" | "BUILDER" | "BLOCKED";
 
 type Step = { label: string; value: string };
 
@@ -29,6 +29,7 @@ const ROUTE_COLOR: Record<Route, string> = {
   FAST: "var(--color-accent-oss)",
   OPERATOR: "var(--color-accent-ai)",
   CLAUDE: "var(--color-accent-web)",
+  BUILDER: "var(--color-accent-client)",
   BLOCKED: "var(--color-accent-exp)",
 };
 
@@ -66,6 +67,17 @@ const EXCHANGES: Exchange[] = [
     reply: "Found Budget 2026.numbers in your Documents folder.",
   },
   {
+    said: "Minimise the cloth terminal window",
+    route: "OPERATOR",
+    why: "Dictation misheard \u201cClaude\u201d. Transcription moved onto the Mac to remove the cause.",
+    steps: [
+      { label: "heard", value: "whisper.cpp, locally, on the GPU" },
+      { label: "primed", value: "told the vocabulary before it decides" },
+      { label: "tool", value: "click_menu(Terminal, Window, Minimize)" },
+    ],
+    reply: "Minimised the Claude terminal window.",
+  },
+  {
     said: "Tell Claude to fix the login bug",
     route: "CLAUDE",
     why: "Typed into the real stdin of a live session, not simulated keystrokes.",
@@ -75,6 +87,18 @@ const EXCHANGES: Exchange[] = [
       { label: "shape", value: "strip ANSI, collapse paths, cap length" },
     ],
     reply: "Fixed it — the session token wasn't being refreshed.",
+  },
+  {
+    said: "Make me a tiny site called voice demo with a dark landing page",
+    route: "BUILDER",
+    why: "No trigger phrase. The Operator recognises a coding request itself.",
+    steps: [
+      { label: "tool", value: "build_project(voice-demo)" },
+      { label: "toolset", value: "Read, Write, Edit, Bash, Grep, WebSearch" },
+      { label: "scope", value: "confined to the projects directory" },
+      { label: "mode", value: "detached — iOS abandons a Shortcut at ~60s" },
+    ],
+    reply: "Starting that now. I'll notify you when it's built.",
   },
   {
     said: "Delete the old notes file",

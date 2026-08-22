@@ -5,6 +5,7 @@ import { ProjectPreview } from "@/components/projects/ProjectPreview";
 import { SiriDemo } from "@/components/projects/SiriDemo";
 import { SiriShots } from "@/components/projects/SiriShots";
 import { SiriDiagrams } from "@/components/projects/SiriDiagrams";
+import { SiriScenes } from "@/components/projects/SiriScenes";
 
 /*
   Per-project share cards. Each project has its own generated image, so a link
@@ -81,6 +82,7 @@ export default function ProjectPage({ params }: { params: { slug: string } }) {
           <SiriDemo />
           <SiriShots />
           <SiriDiagrams />
+          <SiriScenes />
         </>
       ) : (
         <ProjectPreview project={project} />
