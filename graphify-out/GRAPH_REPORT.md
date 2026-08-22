@@ -162,3 +162,25 @@ _Questions this graph is uniquely positioned to answer:_
 ## Session addendum — 2026-08-11 (not re-extracted, log only)
 
 Major additions since last graph build: SystemMonitor replaced galaxy/constellation view on /projects. OSPA chatbot (lib/ospa-provider.ts, lib/ospa-knowledge.ts, app/api/ospa/route.ts, components/ospa/OspaChat.tsx) added, runs local Ollama qwen2.5:3b by default. Email system (lib/emails.ts) added with branded templates. Boot sequence (components/home/BootSequence.tsx, lib/boot-once.ts) reworked to once-per-session via sessionStorage. All internal `<a>` converted to next/link `<Link>` (perf + boot-replay bug fix). Full detail in memory: ~/.claude/projects/-Users-keyush/memory/orbit_os_session_2026-08-11.md. Re-run `/graphify /Volumes/ai-hub/orbit-os --update` next session to pick these up structurally.
+
+---
+
+## Session addendum — 2026-08-21 (not re-extracted, log only)
+
+Structural additions since the 2026-08-11 addendum. Re-run `/graphify /Volumes/ai-hub/orbit-os --update` to pick these up as real nodes and edges.
+
+**New components** (all under `components/projects/`, all rendered only for `slug === "siri-mac-agent"` from `app/projects/[slug]/page.tsx`, which now branches instead of always rendering `ProjectPreview`):
+- `SiriDemo.tsx` — interactive replay of the agent's router. Seven exchanges, each carrying route / why / steps / reply. Routes: FAST, OPERATOR, CLAUDE, BUILDER, BLOCKED. Content mirrors the upstream `daemon/router.py` and `daemon/security.py`.
+- `SiriShots.tsx` — the two real iPhone screenshots (Action Button binding, "Now listening").
+- `SiriDiagrams.tsx` — three architecture diagrams (the path, three destinations, four tiers).
+- `SiriScenes.tsx` — three photorealistic illustrations, explicitly labelled "Illustration".
+
+**New assets**: `public/projects/siri-mac-agent/*.webp` (2 screenshots, 3 diagrams, 3 scenes, 164KB total) and `public/og/*.jpg` (14 share cards, 684KB).
+
+**New metadata surface**: `app/layout.tsx` gained `metadataBase` + `openGraph` + `twitter`; `app/projects/[slug]/page.tsx` gained `generateMetadata()` returning a per-project OG image. Before this the site emitted no share metadata at all.
+
+**OSPA provider gained a second backend**: `lib/ospa-provider.ts` now exports `streamGroq`, `streamOspa`, `providerStreams`, and a shared `sanitizingStream()` that wraps both Ollama's NDJSON and Groq's SSE. New sibling `lib/ospa-fallback.ts` (`answerFromRegistry`) is a model-free answer path; `app/api/ospa/route.ts` falls back to it on any 5xx or 429 and returns HTTP 200 with `degraded: true`. Edge worth drawing: `ospa-fallback.ts` depends on `lib/project-search.ts` and `data/projects.ts`, so the assistant degrades to the same search the /projects page uses.
+
+**Registry**: `data/projects.ts` gained `siri-mac-agent` as the first featured entry (13 projects total). Its content is derived from the upstream repo at `/Volumes/ai-hub/siri-mac-agent`, which itself carries a `graphify-out/` — the two graphs are related but separate, and the orbit-os page is downstream of that repo's README, `daemon/router.py`, `daemon/security.py`, `daemon/listen.py`, and `macops/builder.py`.
+
+Full narrative detail in memory: `~/.claude/projects/-Users-keyush/memory/orbit_os_session_2026-08-11.md`.
